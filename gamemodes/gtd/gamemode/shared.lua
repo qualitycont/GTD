@@ -26,3 +26,7 @@ local function _includeSV(path)
         include(path)
     end
 end
+
+_includeSH("core/util.lua")
+_includeSH("player_class/player_td.lua")
+_includeSV("core/round_manager.lua")
