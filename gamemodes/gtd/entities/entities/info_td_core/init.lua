@@ -14,10 +14,11 @@ function ENT:Initialize()
         phys:Wake()
     end
 
-    self:SetMaxHealth(500)
-    self:SetHealth(500)
-    self:SetUseType( SIMPLE_USE )
+    if not self.starthealth then self.starthealth = 500 end
+    if not self.regen then self.regen = 50 end
 
+    self:SetMaxHealh(starthealth)
+    self:SetHealth(starthealth)
 end
 
 function ENT:Use(activator, caller)
@@ -32,14 +33,26 @@ end
 function ENT:OnTakeDamage( dmginfo )
 	-- Make sure we're not already applying damage a second time
 	if ( not self.m_bApplyingDamage ) then
-        dmginfo:GetAttacker():ChatPrint("You damaged the core!")
 		self.m_bApplyingDamage = true
-		self:SetHealth(self:Health() - dmginfo:GetDamage())
+		self:AddHealth( dmginfo:GetDamage() * -1)
 		self.m_bApplyingDamage = false
 
         if self:Health() <= 0 then
-            self:Remove()
+            self:Fire("OnDestroyed")
             GAMEMODE.RoundManager:EndWave(false)
         end
+	end
+end
+
+function ENT:AddHealth( amount )
+    self:SetHealth(math.Clamp(self:Health() + amount, 0, self:GetMaxHealth())
+end
+
+function ENT:KeyValue(key, value)
+	key = string.lower(key)
+	if key == "starthealth" then
+		self.starthealth = value
+    elseif key == "regen" then
+        self.regen = value
 	end
 end

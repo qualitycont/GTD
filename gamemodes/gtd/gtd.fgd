@@ -1,0 +1,37 @@
+//////////////////////////////////////////////////////////////////////////////////
+// GTD FGD - Development Version                                                //
+//////////////////////////////////////////////////////////////////////////////////
+
+@include "base.fgd"
+@include "halflife2.fgd"
+@include "hl2mp.fgd"
+
+//////////////////////////////////////////////////////////////////////////////////
+// Gamemode - Brush Entities /////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+@SolidClass base(Targetname) = trigger_nobuild : "GTD: Anybody in this brush cant build"
+[
+	// Keys
+	enabled(choices) : "Enabled" : 0 : "Enable the brush entity." =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+
+	// Inputs
+	input enable(void)   : "Enable the entity."
+	input disable(void)  : "Disable the entity."
+]
+
+///////////////////////////////////////////////////////////////////////////////////
+// Gamemode - Point Entities //////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+
+@PointClass base(Targetname, Angles) studio("models/props_combine/combinethumper002.mdl") = info_td_core : "GTD: Position of the core, required for most maps."
+[
+	starthealth(integer): "Starting Health" : 500 : "The amount of Health the core spawns with"
+    regen(integer): "Regen" : 50 : "The amount of Health regenerated after each wave"
+
+	// Outputs
+	output OnDestroyed(void) : "Fires when the core is destroyed"
+]
