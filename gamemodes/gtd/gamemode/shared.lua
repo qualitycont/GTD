@@ -27,6 +27,14 @@ local function _includeSV(path)
     end
 end
 
+-- core stuff
 _includeSH("core/util.lua")
+
 _includeSH("player_class/player_td.lua")
+_includeSH("player_class/player_engineer.lua")
+_includeSH("player_class/player_medic.lua")
+_includeSH("player_class/player_sniper.lua")
+_includeSH("player_class/player_soldier.lua")
+_includeSH("player_class/player_trapper.lua")
+
 _includeSV("core/round_manager.lua")

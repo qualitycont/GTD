@@ -98,7 +98,7 @@ function manager:HasEnded()
 end
 
 function manager:GetMaxWaves()
-    return GM.Util.TableLen(waves) - 1 -- We have to subtract one because of Wave 0
+    return table.Count(waves) - 1 -- We have to subtract one because of Wave 0
 end
 
 -- Wave Registration and Actual functionality
@@ -115,6 +115,6 @@ end
 ]]
 
 function manager:RegisterWave(waveinfo)
-    if not waveinfo.Id then waveinfo.Id = GM.Util.TableLen(waves) end
+    if not waveinfo.Id then waveinfo.Id = table.Count(waves) end
     waves[tableinfo.Id] = {OnStart = waveinfo.OnStart, OnEnd = waveinfo.OnEnd}
 end
