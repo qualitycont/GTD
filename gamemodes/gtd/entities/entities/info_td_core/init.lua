@@ -39,6 +39,7 @@ function ENT:OnTakeDamage( dmginfo )
 		self.m_bApplyingDamage = false
 
         if self:Health() <= 0 then
+            dmginfo:GetAttacker():ChatPrint("You destroyed the core!")
             self:Fire("OnDestroyed")
             GAMEMODE.RoundManager:EndWave(false)
         end
