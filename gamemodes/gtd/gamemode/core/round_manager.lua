@@ -28,7 +28,7 @@ function manager:SetState( newstate)
     return true
 end
 
-function self:GetState()
+function manager:GetState()
     return state
 end
 
