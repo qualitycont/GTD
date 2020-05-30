@@ -13,7 +13,7 @@ function ENT:StartTouch( entity )
 end
 
 function ENT:EndTouch( entity )
-	if not IsPlayer(entity) then return end
+	if not entity:IsPlayer() then return end
 	entity:SetCanBuild(true)
 end
 

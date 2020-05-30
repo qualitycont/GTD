@@ -8,17 +8,18 @@ function ENT:Initialize()
     self:PhysicsInit( SOLID_VPHYSICS )
     self:SetMoveType( MOVETYPE_NONE )
     self:SetSolid( SOLID_VPHYSICS )
+    self:SetUseType( SIMPLE_USE )
 
     local phys = self:GetPhysicsObject()
     if phys:IsValid() then
         phys:Wake()
     end
 
-    if not self.starthealth then self.starthealth = 500 end
-    if not self.regen then self.regen = 50 end
+    if self.starthealth == nil then self.starthealth = 500 end
+    if self.regen == nil then self.regen = 50 end
 
-    self:SetMaxHealh(starthealth)
-    self:SetHealth(starthealth)
+    self:SetMaxHealth(self.starthealth)
+    self:SetHealth(self.starthealth)
 end
 
 function ENT:Use(activator, caller)
@@ -45,7 +46,7 @@ function ENT:OnTakeDamage( dmginfo )
 end
 
 function ENT:AddHealth( amount )
-    self:SetHealth(math.Clamp(self:Health() + amount, 0, self:GetMaxHealth())
+    self:SetHealth(math.Clamp(self:Health() + amount, 0, self:GetMaxHealth()))
 end
 
 function ENT:KeyValue(key, value)
