@@ -2,5 +2,8 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 function GM:PlayerSpawn(ply)
-    player_manager.SetPlayerClass( ply, "player_td")
+    if not ply:HasFirstSpawned() then
+        player_manager.SetPlayerClass( ply, "player_td")
+        ply:FirstSpawned()
+    end
 end

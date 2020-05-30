@@ -4,7 +4,7 @@ local PLAYER = {}
 
 function PLAYER:SetupDataTables()
     self.Player:NetworkVar( "Int", 0, "Money" )
-    self.Player:NetworkVar( "Bool", 0 "CanBuild" )
+    self.Player:NetworkVar( "Bool", 0,"CanBuild" )
     if SERVER then
         self.Player:SetMoney(0)
         self.Player:SetCanBuild(true)
