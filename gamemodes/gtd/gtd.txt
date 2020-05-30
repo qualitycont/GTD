@@ -1,0 +1,7 @@
+"gtd"
+{
+	"base"		"base"
+	"title"		"Tower Defense"
+	"maps"		"^td_"
+	"menusystem"	"1"
+}

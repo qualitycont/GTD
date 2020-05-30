@@ -1,7 +1,0 @@
-"gamemodecomp2020"
-{
-	"base"		"base"
-	"title"		"Gamemode Competition 2020"
-	"maps"		"^gm_"
-	"menusystem"	"1"
-}
