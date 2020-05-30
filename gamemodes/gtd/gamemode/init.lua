@@ -6,4 +6,12 @@ function GM:PlayerSpawn(ply)
         player_manager.SetPlayerClass( ply, "player_td")
         ply:FirstSpawned()
     end
+
+    ply:SetupHands()
+
+    player_manager.OnPlayerSpawn(ply)
+    player_manager.RunClass(ply, "Spawn")
+
+    hook.Call("PlayerLoadout", GAMEMODE, ply)
+    hook.Call("PlayerSetModel", GAMEMODE, ply)
 end

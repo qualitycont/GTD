@@ -38,3 +38,5 @@ _includeSH("player_class/player_soldier.lua")
 _includeSH("player_class/player_trapper.lua")
 
 _includeSV("core/round_manager.lua")
+_includeSH("core/player_ext.lua")
+_includeSV("core/player_ext_sv.lua")
