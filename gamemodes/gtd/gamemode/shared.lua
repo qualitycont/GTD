@@ -29,15 +29,14 @@ end
 
 -- core stuff
 _includeSH("core/util.lua")
-
-_includeSH("player_class/player_td.lua")
-_includeSH("player_class/player_engineer.lua")
-_includeSH("player_class/player_medic.lua")
-_includeSH("player_class/player_sniper.lua")
-_includeSH("player_class/player_soldier.lua")
-_includeSH("player_class/player_trapper.lua")
-
 _includeSV("core/round_manager.lua")
+_includeSH("core/class_manager.lua")
+
+-- functionality stuff
 _includeSH("core/player_ext.lua")
 _includeSV("core/player_ext_sv.lua")
 _includeSH("core/concommand.lua")
+_includeSH("player_class/player_td.lua")
+
+-- actual content
+_includeSH("ext/default_classes.lua")
