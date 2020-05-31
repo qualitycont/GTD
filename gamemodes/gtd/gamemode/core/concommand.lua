@@ -7,7 +7,6 @@ concommand.Add("td_class", function(ply, _, args)
     local class = args[1]
 
     ply:SetTDClass(class)
-    ply:StripClassWeapons()
     if ply:Alive() then
         player_manager.RunClass(ply,"Loadout")
     end
