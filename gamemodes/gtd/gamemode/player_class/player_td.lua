@@ -2,9 +2,6 @@ DEFINE_BASECLASS( "player_default" )
 
 local PLAYER = {}
 
-PLAYER.RunSpeed = 260
-PLAYER.WalkSpeed = 180
-
 local function _checkAndGetClass(ply)
     local managerclass = GAMEMODE.ClassManager.GetAll()[ply:GetTDClass()]
     if not managerclass then
@@ -25,9 +22,18 @@ function PLAYER:SetupDataTables()
     end
 end
 
+local WeaponLoadout = {
+    "weapon_fists",
+    "weapon_crowbar"
+}
+
 function PLAYER:Loadout()
     local class = _checkAndGetClass(self.Player)
-    self.Player:Give("weapon_fists")
+
+    for _, weapon in pairs( WeaponLoadout ) do
+        self.Player:Give( weapon )
+    end
+
     for _, v in pairs(class.Weapons) do
         self.Player:Give(v)
     end
@@ -38,7 +44,6 @@ end
 
 function PLAYER:Spawn()
     local class = _checkAndGetClass(self.Player)
-    player_manager.RunClass(self.Player,"SetModel")
     if class.Spawn then class.Spawn(self.Player) end
 end
 
