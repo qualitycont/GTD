@@ -2,11 +2,16 @@ DEFINE_BASECLASS( "player_default" )
 
 local PLAYER = {}
 
+PLAYER.RunSpeed = 260
+PLAYER.WalkSpeed = 180
+
 local function _checkAndGetClass(ply)
     local managerclass = GAMEMODE.ClassManager.GetAll()[ply:GetTDClass()]
     if not managerclass then
         ply:SetTDClass("none")
         managerclass = GAMEMODE.ClassManager.GetAll()["none"]
+    else
+        ply:StripClassWeapons()
     end
     return managerclass
 end
