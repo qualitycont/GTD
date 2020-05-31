@@ -38,7 +38,7 @@ end
 
 function PLAYER:Spawn()
     local class = _checkAndGetClass(self.Player)
-    player_manager.RunClass(self.Player,"SetModel")
+    self.Player:SetModel(class.Model)
     if class.Spawn then class.Spawn(self.Player) end
 end
 
