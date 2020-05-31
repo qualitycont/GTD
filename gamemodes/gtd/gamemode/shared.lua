@@ -31,6 +31,7 @@ end
 -- core stuff
 _includeSH("core/util.lua")
 _includeSH("core/csweapons.lua")
+_includeSV("core/enemy_manager.lua")
 _includeSV("core/round_manager.lua")
 _includeSH("core/class_manager.lua")
 

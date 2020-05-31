@@ -27,11 +27,50 @@
 // Gamemode - Point Entities //////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////
 
-@PointClass base(Targetname, Angles) studio("models/props_combine/combinethumper002.mdl") = info_td_core : "GTD: Position of the core, required for most maps."
+@PointClass base(Targetname) studio("models/props_combine/combinethumper002.mdl") = info_td_core : "GTD: Position of the core, required for most maps."
 [
+	// Keys
 	starthealth(integer): "Starting Health" : 500 : "The amount of Health the core spawns with"
     regen(integer): "Regen" : 50 : "The amount of Health regenerated after each wave"
+	enabled(choices) : "Enabled" : 0 : "Enable the entity." =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+
+	// Inputs
+	input enable(void)   : "Enable the entity."
+	input disable(void)  : "Disable the entity."
 
 	// Outputs
 	output OnDestroyed(void) : "Fires when the core is destroyed"
+]
+
+@PointClass base(Targetname) = info_td_enemy_spawn : "GTD: Enemy Spawn Position"
+[
+	// Keys
+	size(choices) : "Size" : 1 : "Size of the spawn, used if entities have to chose a random spawn." =
+	[
+		0 : "Small"
+		1 : "Medium"
+		2 : "Large"
+		3 : "Huge"
+	]
+	type(choices) : "Type" : 0 : "Type of spawn, only spawns enemies with the same type." =
+	[
+		0 : "Ground"
+		1 : "Air"
+	]
+	enabled(choices) : "Enabled" : 0 : "Enable the entity." =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+
+	// Inputs
+	input enable(void)   : "Enable the entity."
+	input disable(void)  : "Disable the entity."
+
+	// Outputs
+	output OnSpawn(void) : "Fires when an entity is spawned using this spawn"
 ]
