@@ -10,8 +10,6 @@ local function _checkAndGetClass(ply)
     if not managerclass then
         ply:SetTDClass("none")
         managerclass = GAMEMODE.ClassManager.GetAll()["none"]
-    else
-        ply:StripClassWeapons()
     end
     return managerclass
 end
@@ -40,6 +38,7 @@ end
 
 function PLAYER:Spawn()
     local class = _checkAndGetClass(self.Player)
+    player_manager.RunClass(self.Player,"SetModel")
     if class.Spawn then class.Spawn(self.Player) end
 end
 

@@ -4,7 +4,7 @@ manager:Register{
     Name = "engineer",
     DisplayName = "Engineer",
     Description = [[Gain access to a powerful extra tower: The Repair Node!]],
-    Weapons = {"weapon_smg1","weapon_knife"},
+    Weapons = {"weapon_smg1","weapon_crowbar"},
     Model = "models/player/odessa.mdl"
 }
 
@@ -12,7 +12,7 @@ manager:Register{
     Name = "medic",
     DisplayName = "Medic",
     Description = [[Carry your teammates to victory! (Or just yourself) ]],
-    Weapons = {"weapon_pistol","weapon_knife","weapon_medkit"},
+    Weapons = {"weapon_pistol","weapon_crowbar","weapon_medkit"},
     Model = "models/player/Group03m/male_07.mdl"
 }
 
@@ -63,7 +63,7 @@ manager:Register{
     Name = "tank",
     DisplayName = "Tank",
     Description = "Cry some more!",
-    Weapons = {"weapon_m249", "weapon_shotgun"},
+    Weapons = {"weapon_smg1", "weapon_shotgun"},
     Model = "models/player/swat.mdl",
     OnSpawn = function(ply)
         ply:SetMaxHealth(200)
