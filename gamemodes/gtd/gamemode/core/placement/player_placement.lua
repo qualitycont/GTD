@@ -71,9 +71,7 @@ end
 
 local function getSelectedInfo( curSelected )
 	local Obj = Objects[ curSelected ]
-	chat.AddText( Obj.Name )
 end
-
 
 
 local selected = 1
@@ -152,14 +150,12 @@ hook.Add("HUDPaint", "GTD_Placement", function()
 
     if input.IsKeyDown( KEY_E ) then // cycle right
     	cooldown = CurTime() + .3
-    	selected = selected +1
-    	chat.AddText("yay")
+    	selected = math.Clamp(selected + 1, 1, table.Count(Objects))
     end
 
     if input.IsKeyDown( KEY_Q ) then // cycle left
     	cooldown = CurTime() + .3
-    	selected = selected -1
-    	chat.AddText("yay")
+    	selected = math.Clamp(selected - 1, 1, table.Count(Objects))
     end
 
 end)
