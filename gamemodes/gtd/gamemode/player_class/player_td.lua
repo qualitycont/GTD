@@ -16,6 +16,8 @@ end
 
 function PLAYER:SetupDataTables()
     self.Player:NetworkVar( "Int", 0, "Money" )
+    self.Player:NetworkVar( "Int", 1, "Level")
+    self.Player:NetworkVar( "Int", 2, "XP" )
     self.Player:NetworkVar( "Bool", 0, "CanBuild" )
     self.Player:NetworkVar( "String", 0, "TDClass")
     if SERVER then

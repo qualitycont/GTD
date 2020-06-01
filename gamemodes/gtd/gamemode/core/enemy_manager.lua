@@ -23,11 +23,14 @@ function manager:Register(info)
     if not info.Name then return end
     local name = string.lower(info.Name)
     if not info.Class or enemytypes[name] then return end
+
     info.Health = info.Health or 100
     info.Speed = info.Speed or 250
+
     info.Type = info.Type or self.Type.GROUND
     info.Size = info.Size or self.Size.MEDIUM
     info.Spawn = info.Spawn or false
+    
     info.Modifier = info.Modifier or {}
 
     enemytypes[name] = {

@@ -14,8 +14,10 @@ function manager:Register(info)
     info.Name = string.lower(info.Name)
     info.DisplayName = info.DisplayName or info.Name
     info.Description = info.Description or [[No Description Set!]]
+
     info.Weapons = info.Weapons or {}
     info.Model = info.Model or "models/player/kleiner.mdl"
+    
     info.Loadout = function(ply) end
     info.Spawn = function(ply) end
 

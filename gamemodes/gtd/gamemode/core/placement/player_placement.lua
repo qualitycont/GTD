@@ -6,7 +6,7 @@
 local Objects = Objects or { 
 	[1] = {
 		Name = "Pistol Tower",
-		Model = "models/weapons/w_shot_xm1014.mdl",
+		Model = "models/weapons/w_pist_fiveseven.mdl",
 		Price = 100,
 		Damage = 1,
 		FireRate = .5,
@@ -57,7 +57,6 @@ local function drawPlacementModel( index, posX ) -- For caching DModel.
 		Objects[ index ].ModelhasCached = true
 		Objects[ index ].ModelObj = m_obj
 
-		chat.AddText( index .. " cached!")
 	else
 
 		local m_obj 	 = Objects[ index ].ModelObj; -- create for reference.

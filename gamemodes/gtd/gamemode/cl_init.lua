@@ -37,11 +37,15 @@ function GM:HUDPaint()
 	surface.SetDrawColor(255,255,255)
 
 
-	draw.SimpleText(LocalPlayer():Health(),"DermaDefault",0,0,Color(0,0,0))
 	draw.RoundedBox(7.5, w*0.014,h*0.873,w*0.06,h*0.105, Color(167,158,165))
 	avatar:SetPlayer(LocalPlayer(),84)
 	avatar:SetSize(w*0.052,h*0.091)
 	avatar:SetPos(w*0.018,h*0.881)
+
+	draw.SimpleText( LocalPlayer():GetMoney() .. "$", "HudHintTextLarge", ScrW()/2, ScrH()/10*9, Color( 50, 255, 50 ), TEXT_ALIGN_CENTER)	
+	draw.SimpleText( "Level: " .. LocalPlayer():GetLevel(), "HudHintTextLarge", ScrW()/2, ScrH()/10*9+20, Color( 50, 50, 255 ), TEXT_ALIGN_CENTER)
+	draw.SimpleText( LocalPlayer():GetXP() .. " XP", "HudHintTextLarge", ScrW()/2, ScrH()/10*9+40, Color( 50, 50, 255 ), TEXT_ALIGN_CENTER)
+	
 end
 
 function GM:HUDShouldDraw(n)
