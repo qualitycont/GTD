@@ -78,7 +78,7 @@ end
 
 local selected = 1
 local cooldown = CurTime() + .25
-hook.Add("HUDPaint", "cee:td:placement", function()
+hook.Add("HUDPaint", "GTD_Placement", function()
 
 	if LocalPlayer():GetActiveWeapon():GetClass() != "weapon_crowbar" then 
 		dontdrawPlacementModels()
