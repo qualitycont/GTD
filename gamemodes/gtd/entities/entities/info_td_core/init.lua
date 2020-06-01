@@ -15,8 +15,9 @@ function ENT:Initialize()
         phys:Wake()
     end
 
-    if self.starthealth == nil then self.starthealth = 500 end
-    if self.regen == nil then self.regen = 50 end
+    self.starthealth = self.starthealth or 500
+    self.regen = self.regen or 50
+    if self.On == nil then self.On = true end
 
     self:SetMaxHealth(self.starthealth)
     self:SetHealth(self.starthealth)
@@ -56,5 +57,18 @@ function ENT:KeyValue(key, value)
 		self.starthealth = value
     elseif key == "regen" then
         self.regen = value
+	elseif key == "enabled" then
+		self.On = tonumber(value) == 1
 	end
+end
+
+function ENT:AcceptInput(name, caller, activator, arg)
+	name = string.lower(name)
+	if name == "enable" then
+		self.On = true
+		return true
+	elseif name == "disable" then
+		self.On = false
+		return true
+    end
 end
