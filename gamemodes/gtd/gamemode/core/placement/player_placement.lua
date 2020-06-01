@@ -162,9 +162,4 @@ hook.Add("HUDPaint", "GTD_Placement", function()
     	chat.AddText("yay")
     end
 
-   // if input.IsKeyDown( KEY_R ) then
-   // 	cooldown = CurTime() + 1.5
-    //	getSelectedInfo( selected )
-   // end
-
 end)
