@@ -1,5 +1,5 @@
-GM.TowerManger = GM.TowerManger or {}
-local manager = GM.TowerManger -- you know
+GM.TowerManager = GM.TowerManager or {}
+local manager = GM.TowerManager -- you know
 local towertypes = {}
 
 manager.Modifiers = {
