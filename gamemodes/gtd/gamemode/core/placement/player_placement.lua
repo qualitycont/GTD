@@ -85,7 +85,7 @@ hook.Add("HUDPaint", "GTD_Placement", function()
 		return 
 	end;
 
-	surface.SetFont( "GModToolSubtitle" )
+	surface.SetFont( "HudHintTextLarge" )
 	surface.SetTextColor( 255, 255, 255 )
 	surface.SetTextPos( ScrW()/6, ScrH()/2+325) 
 	surface.DrawText( "Press 'Q' or 'E' to Cycle through towers." )	
