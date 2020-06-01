@@ -3,32 +3,7 @@
 -- heavy models/weapons/w_mach_m249para.mdl
 -- pistol models/weapons/w_pist_p250.mdl
 
-local Objects = Objects or { 
-	[1] = {
-		Name = "Pistol Tower",
-		Model = "models/weapons/w_pist_fiveseven.mdl",
-		Price = 100,
-		Damage = 1,
-		FireRate = .5,
-		Health = 30
-	},
-	[2] = {
-		Name = "Shotgun Tower",
-		Model = "models/weapons/w_shot_xm1014.mdl",
-		Price = 350,
-		Damage = 6,
-		FireRate = 1.5,
-		Health = 130
-	},
-	[3] = {
-		Name = "Sniper Tower",
-		Model = "models/weapons/w_snip_scout.mdl",
-		Price = 750,
-		Damage = 13,
-		FireRate = 3,
-		Health = 90
-	}
-}
+local Objects = Objects or GAMEMODE.TowerManager.GetAll()
 
 local function dontdrawPlacementModels()
 
