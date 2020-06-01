@@ -4,9 +4,7 @@
 -- pistol models/weapons/w_pist_p250.mdl
 
 
-PlacementSystem = {}
-
-if PlacementSystem.Objects then return end
+PlacementSystem = PlacementSystem or {}
 PlacementSystem.Objects = PlacementSystem.Objects or {
 	[1] = {
 		Name = "Pistol Tower",
@@ -52,10 +50,10 @@ PlacementSystem.Objects = PlacementSystem.Objects or {
 }
  
 local function dontdrawPlacementModels()
-
 	for k, v in pairs ( PlacementSystem.Objects ) do
 		if v.ModelObj then
 			v.ModelObj:SetVisible(false)
+			v.ModelhasCached = true
 		end
 	end
 end
@@ -64,31 +62,33 @@ local cooldown = CurTime() + .25
        
 local function drawPlacementModel( index, posX ) -- For caching DModel.
 
-	--if CurTime() > cooldown then return end
-	if  PlacementSystem.Objects[ index ].ModelhasCached == nil then
+	local obj	 	 = PlacementSystem.Objects[ index ].ModelObj; -- create for reference.
+	local m_Model    = PlacementSystem.Objects[ index ].Model;
+	local m_hasCache = PlacementSystem.Objects[ index ].ModelhasCached;
+
+	if  obj == nil then
 
 		local m_obj = vgui.Create( "DModelPanel" )
 		m_obj:SetSize( 200, 200 )
 		m_obj:SetModel( PlacementSystem.Objects[ index ].Model )
-		m_obj.m_parent = index
 		function m_obj:LayoutEntity( Entity ) return end 
 		function m_obj.Entity:GetPlayerColor() return Vector (1, 0, 0) end --we need to set it to a Vector not a Color, so the values are normal RGB values divided by 255.
 		
 		PlacementSystem.Objects[ index ].ModelhasCached = true
 		PlacementSystem.Objects[ index ].ModelObj = m_obj
- 		
-	else
-  
-		local obj	 = PlacementSystem.Objects[ index ].ModelObj; -- create for reference.
-		local m_Model    = PlacementSystem.Objects[ index ].Model;
-		local m_hasCache = PlacementSystem.Objects[ index ].ModelhasCached;
+
+		chat.AddText( index .. " was crerereated.")
+ 		   
+	else 
 		if obj then
-			obj:SetPos(posX-50,ScrH() / 2 - (200-15) )
-			obj:SetVisible(true)
+			if m_hasCache == true then
+				obj:SetVisible(true)
+				obj:SetPos(posX-50,ScrH() / 2 - (200-15) )
+			end
 		end
 	end
 end
-
+   
 local function getSelectedInfo( curSelected )
 	local Obj = PlacementSystem.Objects[ curSelected ]
 end
@@ -100,10 +100,10 @@ hook.Add("HUDPaint", "GTD_Placement", function()
 		dontdrawPlacementModels()
 		return 
 	end;
-
+ 
 	surface.SetFont( "HudHintTextLarge" )
 	surface.SetTextColor( 255, 255, 255 )
-	surface.SetTextPos( ScrW()/6, ScrH()/2+325) 
+	surface.SetTextPos( ScrW()/3+100, ScrH()/2 - 200) 
 	surface.DrawText( "Press 'Q' or 'E' to Cycle through towers." )	
 
 
@@ -167,12 +167,12 @@ hook.Add("HUDPaint", "GTD_Placement", function()
     if cooldown > CurTime() then return end
 
     if input.IsKeyDown( KEY_E ) then // cycle right
-    	cooldown = CurTime() + .3
+    	cooldown = CurTime() + .5
     	selected = math.Clamp(selected + 1, 1, table.Count(PlacementSystem.Objects))
     end
 
     if input.IsKeyDown( KEY_Q ) then // cycle left
-    	cooldown = CurTime() + .3
+    	cooldown = CurTime() + .5
     	selected = math.Clamp(selected - 1, 1, table.Count(PlacementSystem.Objects))
     end
 
