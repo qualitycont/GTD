@@ -27,6 +27,10 @@ local function _includeSV(path)
     end
 end
 
+-- include config first so we can use its values later
+_includeSH("config/config.lua")
+_includeSH("config/economy.lua")
+
 -- core stuff
 _includeSH("core/util.lua")
 _includeSV("core/enemy_manager.lua")
@@ -39,6 +43,7 @@ _includeSH("core/player_ext.lua")
 _includeSV("core/player_ext_sv.lua")
 _includeSH("core/concommand.lua")
 _includeSH("player_class/player_td.lua")
+_includeSV("core/economy.lua")
 
 -- actual content
 _includeSH("ext/default_classes.lua")
@@ -47,6 +52,6 @@ _includeCL("ui/class_select.lua")
 
 -- placement
 
-_includeSH("core/placement/player_placement.lua")
-_includeSH("core/placement/placement_blueprint.lua")
+_includeCL("core/placement/player_placement.lua")
+_includeCL("core/placement/placement_blueprint.lua")
 

@@ -3,7 +3,24 @@
 -- heavy models/weapons/w_mach_m249para.mdl
 -- pistol models/weapons/w_pist_p250.mdl
 
-local Objects = Objects or GAMEMODE.TowerManager.GetAll()
+local Objects = Objects or {
+    [1] = {
+		Name = "Sniper Tower",
+		Model = "models/weapons/w_snip_scout.mdl",
+		Price = 750,
+		Damage = 13,
+		FireRate = 3,
+		Health = 90
+	},
+	[2] = {
+		Name = "Shotgun Tower",
+		Model = "models/weapons/w_shot_xm1014.mdl",
+		Price = 350,
+		Damage = 6,
+		FireRate = 1.5,
+		Health = 130
+	}
+}
 
 local function dontdrawPlacementModels()
 
@@ -50,12 +67,13 @@ end
 
 local selected = 1
 local cooldown = CurTime() + .25
+--Objects = GAMEMODE.TowerManager.GetAll()
 hook.Add("HUDPaint", "GTD_Placement", function()
 
-	if LocalPlayer():GetActiveWeapon():GetClass() != "weapon_crowbar" then 
+	--if not LocalPlayer():GetActiveWeapon() or LocalPlayer():GetActiveWeapon():GetClass() != "weapon_crowbar" then 
 		dontdrawPlacementModels()
 		return 
-	end;
+	--end;
 
 	surface.SetFont( "HudHintTextLarge" )
 	surface.SetTextColor( 255, 255, 255 )
