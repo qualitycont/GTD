@@ -3,53 +3,97 @@
 -- heavy models/weapons/w_mach_m249para.mdl
 -- pistol models/weapons/w_pist_p250.mdl
 
-local Objects = Objects or GAMEMODE.TowerManager.GetAll()
 
+PlacementSystem = {}
+
+if PlacementSystem.Objects then return end
+PlacementSystem.Objects = PlacementSystem.Objects or {
+	[1] = {
+		Name = "Pistol Tower",
+		Model = "models/weapons/w_eq_taser.mdl",
+		Damage = 3,
+		FireRate = 0.6,
+		Health = 100,
+		Price = 120
+	},
+	[2] = {
+		Name = "Pistol Tower",
+		Model = "models/weapons/w_eq_taser.mdl",
+		Damage = 3,
+		FireRate = 0.6,
+		Health = 100,
+		Price = 120
+	},
+	[3] = {
+		Name = "Pistol Tower",
+		Model = "models/weapons/w_eq_taser.mdl",
+		Damage = 3,
+		FireRate = 0.6,
+		Health = 100,
+		Price = 120
+	},
+	[4] = {
+		Name = "Pistol Tower",
+		Model = "models/weapons/w_eq_taser.mdl",
+		Damage = 3,
+		FireRate = 0.6,
+		Health = 100,
+		Price = 120
+	},
+	[5] = {
+		Name = "cee is gay",
+		Model = "models/weapons/w_eq_taser.mdl",
+		Damage = 3,
+		FireRate = 0.6,
+		Health = 100,
+		Price = 120
+	}
+
+}
+ 
 local function dontdrawPlacementModels()
 
-	for k, v in pairs ( Objects ) do
+	for k, v in pairs ( PlacementSystem.Objects ) do
 		if v.ModelObj then
-			v.ModelObj:SetVisible( false )
+			v.ModelObj:SetVisible(false)
 		end
 	end
 end
 
+local cooldown = CurTime() + .25
+       
 local function drawPlacementModel( index, posX ) -- For caching DModel.
 
+	--if CurTime() > cooldown then return end
+	if  PlacementSystem.Objects[ index ].ModelhasCached == nil then
 
-	if !Objects[ index ].ModelhasCached then
-
-		--local m_obj 	 = Objects[ index ].ModelObj -- create for reference.
-		--local m_Model    = Objects[ index ].Model
-		--local m_hasCache = Objects[ index ].ModelhasCached
-
-		m_obj = vgui.Create( "DModelPanel" )
+		local m_obj = vgui.Create( "DModelPanel" )
 		m_obj:SetSize( 200, 200 )
-		m_obj:SetModel( Objects[ index ].Model )
+		m_obj:SetModel( PlacementSystem.Objects[ index ].Model )
+		m_obj.m_parent = index
 		function m_obj:LayoutEntity( Entity ) return end 
 		function m_obj.Entity:GetPlayerColor() return Vector (1, 0, 0) end --we need to set it to a Vector not a Color, so the values are normal RGB values divided by 255.
 		
-		Objects[ index ].ModelhasCached = true
-		Objects[ index ].ModelObj = m_obj
-
+		PlacementSystem.Objects[ index ].ModelhasCached = true
+		PlacementSystem.Objects[ index ].ModelObj = m_obj
+ 		
 	else
-
-		local m_obj 	 = Objects[ index ].ModelObj; -- create for reference.
-		local m_Model    = Objects[ index ].Model;
-		local m_hasCache = Objects[ index ].ModelhasCached;
-
-		m_obj:SetPos(posX-50,ScrH() / 2 - (200-15) )
-		m_obj:SetVisible(true)
+  
+		local obj	 = PlacementSystem.Objects[ index ].ModelObj; -- create for reference.
+		local m_Model    = PlacementSystem.Objects[ index ].Model;
+		local m_hasCache = PlacementSystem.Objects[ index ].ModelhasCached;
+		if obj then
+			obj:SetPos(posX-50,ScrH() / 2 - (200-15) )
+			obj:SetVisible(true)
+		end
 	end
 end
 
 local function getSelectedInfo( curSelected )
-	local Obj = Objects[ curSelected ]
+	local Obj = PlacementSystem.Objects[ curSelected ]
 end
 
-
 local selected = 1
-local cooldown = CurTime() + .25
 hook.Add("HUDPaint", "GTD_Placement", function()
 
 	if LocalPlayer():GetActiveWeapon():GetClass() != "weapon_crowbar" then 
@@ -65,7 +109,7 @@ hook.Add("HUDPaint", "GTD_Placement", function()
 
 	local spacing = 125
 	local inInfo = false
-	for k, v in pairs( Objects ) do
+	for k, v in pairs( PlacementSystem.Objects ) do
 
 		local _x = ScrW()/2 + spacing * k - ((spacing)*selected)-50
 
@@ -124,12 +168,12 @@ hook.Add("HUDPaint", "GTD_Placement", function()
 
     if input.IsKeyDown( KEY_E ) then // cycle right
     	cooldown = CurTime() + .3
-    	selected = math.Clamp(selected + 1, 1, table.Count(Objects))
+    	selected = math.Clamp(selected + 1, 1, table.Count(PlacementSystem.Objects))
     end
 
     if input.IsKeyDown( KEY_Q ) then // cycle left
     	cooldown = CurTime() + .3
-    	selected = math.Clamp(selected - 1, 1, table.Count(Objects))
+    	selected = math.Clamp(selected - 1, 1, table.Count(PlacementSystem.Objects))
     end
 
 end)
