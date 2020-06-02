@@ -50,6 +50,10 @@ end)
 function economy.GainXP(ply, amount)
     local needed = ply:GetNeededXP()
     local cur = ply:GetXP()
+    local hookresult = hook.Run("GTD_XPGained", ply, amount)
+    if hookresult == false then return end
+    if isnumber(hookresult) then amount = hookresult end
+
     if cur + amount >= needed then
         local newlevel = ply:GetLevel() + 1
         net.Start("gtd_levelup")
@@ -63,6 +67,14 @@ function economy.GainXP(ply, amount)
 
     ply:SetXP(cur + amount)
     _saveAll()
+end
+
+function economy.GainMoney(ply, amount)
+    local hookresult = hook.Run("GTD_MoneyGained", ply, amount)
+    if hookresult == false then return end
+    if isnumber(hookresult) then amount = hookresult end
+
+    ply:SetMoney(ply:GetMoney() + amount)
 end
 
 if !timer.Exists("GTD_PeriodicXP") then

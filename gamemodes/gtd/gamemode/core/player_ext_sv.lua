@@ -20,3 +20,7 @@ end
 function meta:GainXP(amount)
    GAMEMODE.Economy.GainXP(self, amount) -- smh
 end
+
+function meta:GainMoney(amount)
+   GAMEMODE.Economy.GainMoney(self, amount) -- smh
+end

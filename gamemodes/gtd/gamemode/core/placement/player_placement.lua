@@ -90,7 +90,7 @@ end
 local function getSelectedInfo( curSelected )
 	local Obj = PlacementSystem.Objects[ curSelected ]
 end
---[[
+
 local selected = 1
 hook.Add("HUDPaint", "GTD_Placement", function()
 
@@ -174,4 +174,4 @@ hook.Add("HUDPaint", "GTD_Placement", function()
     	selected = math.Clamp(selected - 1, 1, table.Count(PlacementSystem.Objects))
     end
 
-end)]]--
+end)

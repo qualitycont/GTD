@@ -11,5 +11,5 @@ local config = GM.Config
 config.BaseXPNeeded = 100 -- how much XP is needed?
 config.XPNeededMultipler = 1.1 -- Modifier, gets multiplied with your current level (Example: Level 34 would get 34*XPNeededMultiplier*Base excluding all other bonuses)
 
-config.TimeBonus = 100 -- How much XP to give every x seconds
-config.TimeNeededForBonus = 5 -- x seconds from ^
+config.TimeBonus = 50 -- How much XP to give every x seconds
+config.TimeNeededForBonus = 120 -- x seconds from ^

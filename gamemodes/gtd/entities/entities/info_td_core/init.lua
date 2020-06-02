@@ -24,6 +24,7 @@ function ENT:Initialize()
 end
 
 function ENT:Use(activator, caller)
+    if not self.On then return end
     activator:ChatPrint("Current Health: "..self:Health())
     return
 end
@@ -34,6 +35,7 @@ end
 
 function ENT:OnTakeDamage( dmginfo )
 	-- Make sure we're not already applying damage a second time
+    if not self.On then return end
 	if ( not self.m_bApplyingDamage ) then
 		self.m_bApplyingDamage = true
 		self:AddHealth( dmginfo:GetDamage() * -1)

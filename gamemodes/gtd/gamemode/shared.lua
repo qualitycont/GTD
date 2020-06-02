@@ -36,6 +36,7 @@ _includeSH("core/util.lua")
 _includeSV("core/enemy_manager.lua")
 _includeSV("core/round_manager.lua")
 _includeSH("core/class_manager.lua")
+_includeSH("core/perk_manager.lua")
 _includeSH("core/tower_manager.lua")
 
 -- functionality stuff
