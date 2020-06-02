@@ -13,7 +13,7 @@ function meta:ToggleReady()
 end
 
 function meta:GetNeededXP()
-    return ply:GetLevel() * GAMEMODE.Config["XPNeededMultipler"] * GAMEMODE.Config["BaseXPNeeded"]
+    return self:GetLevel() * GAMEMODE.Config["XPNeededMultipler"] * GAMEMODE.Config["BaseXPNeeded"]
 end
 
 function meta:HasMoney(amount)

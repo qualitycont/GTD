@@ -38,7 +38,7 @@ function GM:HUDPaint()
 
 
 	draw.RoundedBox(7.5, w*0.014,h*0.873,w*0.06,h*0.105, Color(167,158,165))
-	avatar:SetPlayer(ply,84)
+	avatar:SetPlayer(LocalPlayer(),84)
 	avatar:SetSize(w*0.052,h*0.091)
 	avatar:SetPos(w*0.018,h*0.881)
 
