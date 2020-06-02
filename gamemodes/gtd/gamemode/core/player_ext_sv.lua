@@ -18,5 +18,5 @@ function meta:StripClassWeapons()
 end
 
 function meta:GainXP(amount)
-   GM.Economy.GainXP(self, amount) 
+   GAMEMODE.Economy.GainXP(self, amount) -- smh
 end

@@ -20,3 +20,8 @@ end)
 concommand.Add("td_currentclass",function(ply)
     print(ply:GetTDClass())
 end)
+
+concommand.Add("td_stats",function(ply)
+    print("Level: ".. ply:GetLevel())
+    print("XP: ".. ply:GetXP())
+end)

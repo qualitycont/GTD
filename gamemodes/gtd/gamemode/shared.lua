@@ -49,6 +49,7 @@ _includeSV("core/economy.lua")
 _includeSH("ext/default_classes.lua")
 _includeSV("ui/networking_sv.lua")
 _includeCL("ui/class_select.lua")
+_includeCL("ui/levelup_notify.lua")
 
 -- placement
 
