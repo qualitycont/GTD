@@ -35,7 +35,6 @@ hook.Add("PlayerLoadout", "GTD_SyncEconomy", function(ply)
         sql.Query("INSERT INTO GTD_Data(SteamID, Level, XP, Credits) VALUES('"..sid.."', 1, 0, 0)")
     end
     local data = _data(ply)
-    PrintTable(data)
 
     ply:SetLevel(data.Level)
     ply:SetXP(data.XP)

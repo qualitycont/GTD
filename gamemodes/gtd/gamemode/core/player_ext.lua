@@ -32,9 +32,12 @@ function meta:GetEquippedPerks()
     equipped = {}
 
     local nwvars = self:GetNWVarTable()
+    local perks = GAMEMODE.PerkManager.GetAll()
     for k, v in pairs(nwvars) do
         if string.StartWith(k, "GTD_Perk_") then
-            equipped[tonumber(string.sub(k,10))] = v
+            local perk = perks[v]
+            perk.Name = v
+            equipped[tonumber(string.sub(k,10))] = perk
         end
     end
 
@@ -54,16 +57,20 @@ end
 
 function meta:CanUseSlot(slot)
     local amount = GAMEMODE.Config.PerkSlots
-    if slot < 1 or slot > amount then return false end
+    slot = tonumber(slot)
+    if not isnumber(slot) or slot < 1 or slot > amount then return false end
     if GAMEMODE.Config.PerkSlotRequirements[slot] and self:GetLevel() < GAMEMODE.Config.PerkSlotRequirements[slot] then return false end
     return true
 end
 
 function meta:EquipPerk(key, slot)
     local perk = GAMEMODE.PerkManager.GetAll()[key]
-    if not perk then return end
+    if not istable(perk) then return end
+
     if self:HasPerkEquipped(key) then return false end
-    if self:CanUseSlot(slot) then return false end
+    if !self:CanUseSlot(slot) then return false end
+    if self:GetLevel() < perk.Level then return false end
+    if perk.Class != "" and self:GetTDClass() != perk.Class then return false end
 
     self:SetNWString("GTD_Perk_"..slot,key)
     perk.OnEquip(self)

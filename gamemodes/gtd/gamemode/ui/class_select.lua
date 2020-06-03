@@ -54,6 +54,6 @@ local function _openMenu()
     end
 end
 
-net.Receive("td_f2", function()
+net.Receive("gtd_f2", function()
     _openMenu()
 end)
