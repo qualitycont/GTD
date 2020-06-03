@@ -94,6 +94,7 @@ end
 local selected = 1
 hook.Add("HUDPaint", "GTD_Placement", function()
 
+	if not IsValid(LocalPlayer():GetActiveWeapon()) then return end
 	if not LocalPlayer():Alive() or not LocalPlayer():GetActiveWeapon() or LocalPlayer():GetActiveWeapon():GetClass() != "weapon_crowbar" then 
 		dontdrawPlacementModels()
 		return 
