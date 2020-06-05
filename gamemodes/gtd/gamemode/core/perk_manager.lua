@@ -97,7 +97,7 @@ if SERVER then
         end
 
         if target:IsPlayer() then
-            for _, perk in pairs(atk:GetEquippedPerks()) do
+            for _, perk in pairs(target:GetEquippedPerks()) do
                 if perk.Modifier == manager.Modifiers.LESS_DAMAGE then
                     if not perk.ModifierCondition(target, dmg) then continue end
                     scale = scale * (1-perk.ModifierPower)

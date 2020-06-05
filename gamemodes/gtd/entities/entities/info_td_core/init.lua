@@ -19,6 +19,8 @@ function ENT:Initialize()
     self.regen = self.regen or 50
     if self.On == nil then self.On = true end
 
+    self.Alive = true
+
     self:SetMaxHealth(self.starthealth)
     self:SetHealth(self.starthealth)
 end
@@ -36,17 +38,15 @@ end
 function ENT:OnTakeDamage( dmginfo )
 	-- Make sure we're not already applying damage a second time
     if not self.On then return end
-	if ( not self.m_bApplyingDamage ) then
-		self.m_bApplyingDamage = true
-		self:AddHealth( dmginfo:GetDamage() * -1)
-		self.m_bApplyingDamage = false
+    if not self.Alive then return end
+    self:AddHealth( dmginfo:GetDamage() * -1)
 
-        if self:Health() <= 0 then
-            dmginfo:GetAttacker():ChatPrint("You destroyed the core!")
-            self:Fire("OnDestroyed")
-            GAMEMODE.RoundManager:EndWave(false)
-        end
-	end
+    if self:Health() <= 0 then
+        self:TriggerOutput("OnDestroyed", dmginfo:GetAttacker())
+        dmginfo:GetAttacker():ChatPrint("You destroyed the core!")
+        self.Alive = false
+        GAMEMODE.RoundManager:EndWave(false)
+    end
 end
 
 function ENT:AddHealth( amount )
@@ -54,7 +54,12 @@ function ENT:AddHealth( amount )
 end
 
 function ENT:KeyValue(key, value)
+    if key == "OnDestroyed" then
+		self:StoreOutput( key, value )
+    end
+
 	key = string.lower(key)
+    print("keyvalue k:"..key.."v:"..value)
 	if key == "starthealth" then
 		self.starthealth = value
     elseif key == "regen" then

@@ -16,7 +16,7 @@ local function _save(ply)
 end
 
 local function _data(ply)
-    return sql.Query("SELECT * FROM GTD_Data WHERE SteamID = "..ply:SteamID64())[1]
+    return sql.Query("SELECT * FROM GTD_Data WHERE SteamID = '"..ply:SteamID64().."';")[1]
 end
 
 if not sql.TableExists("GTD_Data") then
