@@ -1,8 +1,8 @@
 include("shared.lua")
 
-local mat = Material("content/materials/background.png")
-local mat2 = Material("content/materials/hp.png")
-local mat3 = Material("content/materials/armor.png")
+local mat = Material("materials/background.png")
+local mat2 = Material("materials/hp.png")
+local mat3 = Material("materials/armor.png")
 
 local avatar = vgui.Create("AvatarImage")
 avatar:SetSize(84,84)
