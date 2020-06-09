@@ -20,10 +20,12 @@ function PLAYER:SetupDataTables()
     self.Player:NetworkVar( "Int", 2, "XP" )
     self.Player:NetworkVar( "Int", 3, "Credits")
     self.Player:NetworkVar( "Bool", 0, "CanBuild" )
+    self.Player:NetworkVar( "Bool", 1, "holdingBP") -- holding blueprint
     self.Player:NetworkVar( "String", 0, "TDClass")
     if SERVER then
         self.Player:SetMoney(0)
         self.Player:SetCanBuild(true)
+        self.Player:SetholdingBP(false)
         self.Player:SetTDClass("none")
     end
 end

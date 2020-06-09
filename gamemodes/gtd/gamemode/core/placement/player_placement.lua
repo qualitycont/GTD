@@ -1,177 +1,340 @@
 -- Taser models/weapons/w_eq_taser.mdl
 -- heavy models/weapons/w_mach_m249para.mdl
 -- pistol models/weapons/w_pist_p250.mdl
+if SERVER then
+	util.AddNetworkString("GTD:PlacementSystem:Init")
+	util.AddNetworkString("GTD:PlacementSystem:StartPrePlace")
+	util.AddNetworkString("GTD:PlacementSystem:CancelPrePlace")
 
-PlacementSystem = PlacementSystem or {}
-PlacementSystem.Objects = PlacementSystem.Objects or {
-	[1] = {
-		Name = "Pistol Tower",
-		Model = "models/weapons/w_eq_taser.mdl",
-		Damage = 3,
-		FireRate = 0.6,
-		Health = 100,
-		Price = 120
-	},
-	[2] = {
-		Name = "Pistol Tower",
-		Model = "models/weapons/w_eq_taser.mdl",
-		Damage = 3,
-		FireRate = 0.6,
-		Health = 100,
-		Price = 120
-	},
-	[3] = {
-		Name = "Pistol Tower",
-		Model = "models/weapons/w_eq_taser.mdl",
-		Damage = 3,
-		FireRate = 0.6,
-		Health = 100,
-		Price = 120
-	},
-	[4] = {
-		Name = "Pistol Tower",
-		Model = "models/weapons/w_eq_taser.mdl",
-		Damage = 3,
-		FireRate = 0.6,
-		Health = 100,
-		Price = 120
-	},
-	[5] = {
-		Name = "cee is gay",
-		Model = "models/weapons/w_eq_taser.mdl",
-		Damage = 3,
-		FireRate = 0.6,
-		Health = 100,
-		Price = 120
+	PlacementSystem = PlacementSystem or {}
+	PlacementSystem.Objects = PlacementSystem.Objects or {
+		[1] = {
+			Name = "Pistol Tower",
+			Model = "models/weapons/w_eq_taser.mdl",
+			Damage = 3,
+			FireRate = 0.6,
+			Health = 100,
+			Price = 120
+		},
+		[2] = {
+			Name = "Pistol Tower",
+			Model = "models/weapons/w_eq_taser.mdl",
+			Damage = 3,
+			FireRate = 0.6,
+			Health = 100,
+			Price = 120
+		},
+		[3] = {
+			Name = "Pistol Tower",
+			Model = "models/weapons/w_eq_taser.mdl",
+			Damage = 3,
+			FireRate = 0.6,
+			Health = 100,
+			Price = 120
+		},
+		[4] = {
+			Name = "Pistol Tower",
+			Model = "models/weapons/w_eq_taser.mdl",
+			Damage = 3,
+			FireRate = 0.6,
+			Health = 100,
+			Price = 120
+		},
+		[5] = {
+			Name = "cee is gay",
+			Model = "models/weapons/w_eq_taser.mdl",
+			Damage = 3,
+			FireRate = 0.6,
+			Health = 100,
+			Price = 120
+		}
+
 	}
 
-}
- 
-local function dontdrawPlacementModels()
-	for k, v in pairs ( PlacementSystem.Objects ) do
-		if v.ModelObj then
-			v.ModelObj:SetVisible(false)
-			v.ModelhasCached = true
+	function PlacementSystem.PlaceBlueprint( plyPlacing, towerIndex )
+		print("BP MODE: -> ", plyPlacing:Nick(), towerIndex)
+		plyPlacing:ChatPrint(" Starting to place tower...")
+
+		-- Player is now holding a blueprint
+		plyPlacing:SetholdingBP( true )
+
+		local idToTower = PlacementSystem.Objects[ towerIndex ]
+		local bp = ents.Create("td_tower_base")
+		bp:SetPos(plyPlacing:GetEyeTrace().HitPos)
+		bp:SetAngles(plyPlacing:GetAngles())
+		bp:SetModel("models/Combine_turrets/Floor_turret.mdl")
+		  bp:SetOwner( plyPlacing )
+		  bp:SetisBluePrint( true )
+		bp:Spawn()
+		bp.Think = function(_s)
+			print(_s:GetOwner())
+			if !_s:GetOwner() then return end
+			if !_s:GetisBluePrint() then return end
+
+			_s:SetPos( _s:GetOwner():GetEyeTrace().HitPos )
 		end
+
+
 	end
-end
 
-local cooldown = CurTime() + .25
-       
-local function drawPlacementModel( index, posX ) -- For caching DModel.
+	hook.Add("PlayerInitialSpawn", "GTD:PlacementSystem_Objects:InitSendCopy", function(ply)
+		net.Start("GTD:PlacementSystem:Init")
+		 net.WriteTable(PlacementSystem.Objects)
+		net.Send(ply)
+	end)
 
-	local obj	 	 = PlacementSystem.Objects[ index ].ModelObj; -- create for reference.
-	local m_Model    = PlacementSystem.Objects[ index ].Model;
-	local m_hasCache = PlacementSystem.Objects[ index ].ModelhasCached;
 
-	if  obj == nil then
 
-		local m_obj = vgui.Create( "DModelPanel" )
-		m_obj:SetSize( 200, 200 )
-		m_obj:SetModel( PlacementSystem.Objects[ index ].Model )
-		function m_obj:LayoutEntity( Entity ) return end 
-		function m_obj.Entity:GetPlayerColor() return Vector (1, 0, 0) end --we need to set it to a Vector not a Color, so the values are normal RGB values divided by 255.
-		
-		PlacementSystem.Objects[ index ].ModelhasCached = true
-		PlacementSystem.Objects[ index ].ModelObj = m_obj
+	net.Receive("GTD:PlacementSystem:StartPrePlace", function(len, ply)
+		-- start the towerplace ( i.e blueprint )
+		local towerIndex = net.ReadInt(32)
+		PlacementSystem.PlaceBlueprint( ply, towerIndex )
+	end)
 
-		chat.AddText( index .. " was crerereated.")
- 		   
-	else 
-		if obj then
-			if m_hasCache == true then
-				obj:SetVisible(true)
-				obj:SetPos(posX-50,ScrH() / 2 - (200-15) )
+	net.Receive("GTD:PlacementSystem:CancelPrePlace", function(len, ply) -- cee being lazy ;p
+		for k, v in pairs( ents.FindByClass("td_tower_base") ) do
+			if v:IsPlayer() then continue end;
+			if !IsValid(v) then continue end;
+
+			if v:GetisBluePrint() == true then
+				if v:GetOwner() == ply and ply:GetholdingBP() then
+					ply:SetholdingBP(false)
+					v:Remove()
+				end
+			end
+		end
+	end)
+
+
+else
+
+surface.CreateFont( "gtd:TestFont", {
+	font = "Arial", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
+	extended = false,
+	size = 33,
+	weight = 500,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+	underline = false,
+	italic = false,
+	strikeout = false,
+	symbol = false,
+	rotary = false,
+	shadow = false,
+	additive = false,
+	outline = false,
+})
+
+
+
+
+	-- Clientside
+
+
+
+
+
+	PlacementSystem = PlacementSystem or {}
+	PlacementSystem.Objects = PlacementSystem.Objects
+
+	net.Receive("GTD:PlacementSystem:Init", function()
+
+		print("-- Client received from server! --")
+		print("-- Client received from server! --")
+		print("-- Client received from server! --")
+		print("-- Client received from server! --")
+
+		local Towers = net.ReadTable()
+		PlacementSystem.Objects = Towers
+	end)
+
+	--if CLIENT then return end;
+
+	local function dontdrawPlacementModels()
+		for k, v in pairs ( PlacementSystem.Objects ) do
+			if v.ModelObj then
+				v.ModelObj:SetVisible(false)
+				v.ModelhasCached = true
 			end
 		end
 	end
-end
-   
-local function getSelectedInfo( curSelected )
-	local Obj = PlacementSystem.Objects[ curSelected ]
-end
 
-local selected = 1
-hook.Add("HUDPaint", "GTD_Placement", function()
+	local cooldown = CurTime() + .25
+	       
+	local function drawPlacementModel( index, posX ) -- For caching DModel.
 
-	if not LocalPlayer():Alive() or not IsValid(LocalPlayer():GetActiveWeapon()) or LocalPlayer():GetActiveWeapon():GetClass() != "weapon_crowbar" then 
-		dontdrawPlacementModels()
-		return 
+		local obj	 	 = PlacementSystem.Objects[ index ].ModelObj; -- create for reference.
+		local m_Model    = PlacementSystem.Objects[ index ].Model;
+		local m_hasCache = PlacementSystem.Objects[ index ].ModelhasCached;
+
+		if  obj == nil then
+
+			local m_obj = vgui.Create( "DModelPanel" )
+			m_obj:SetSize( 200, 200 )
+			m_obj:SetModel( PlacementSystem.Objects[ index ].Model )
+			function m_obj:LayoutEntity( Entity ) return end 
+			function m_obj.Entity:GetPlayerColor() return Vector (1, 0, 0) end --we need to set it to a Vector not a Color, so the values are normal RGB values divided by 255.
+			
+			PlacementSystem.Objects[ index ].ModelhasCached = true
+			PlacementSystem.Objects[ index ].ModelObj = m_obj
+
+			chat.AddText( index .. " was crerereated.")
+	 		   
+		else 
+			if obj then
+				if m_hasCache == true then
+					obj:SetVisible(true)
+					obj:SetPos(posX-50,ScrH() / 2 - (200-15) )
+				end
+			end
+		end
 	end
-	
-	surface.SetFont( "HudHintTextLarge" )
-	surface.SetTextColor( 255, 255, 255 )
-	surface.SetTextPos( ScrW()/3+100, ScrH()/2 - 200) 
-	surface.DrawText( "Press 'Q' or 'E' to Cycle through towers." )	
+	   
+	local function getSelectedInfo( curSelected )
+		local Obj = PlacementSystem.Objects[ curSelected ]
+	end
 
+	local selected = 1
+	hook.Add("HUDPaint", "GTD_Placement", function()
 
-	local spacing = 125
-	local inInfo = false
-	for k, v in pairs( PlacementSystem.Objects ) do
+		if not LocalPlayer():Alive() or not IsValid(LocalPlayer():GetActiveWeapon()) or LocalPlayer():GetActiveWeapon():GetClass() != "weapon_crowbar" then 
+			dontdrawPlacementModels()
+			return
+		end
+		
+		if !LocalPlayer():GetholdingBP() then
 
-		local _x = ScrW()/2 + spacing * k - ((spacing)*selected)-50
+			surface.SetFont( "HudHintTextLarge" )
+			surface.SetTextColor( 255, 255, 255 )
+			surface.SetTextPos( ScrW()/3+100, ScrH()/2 - 200) 
+			surface.DrawText( "Press 'Q' or 'E' to Cycle through towers." )	
 
-		surface.SetDrawColor(255,255,255,255)
-		surface.DrawOutlinedRect(  _x, ScrH()/2-50, 100, 100 )
+			surface.SetFont( "gtd:TestFont" )
+			surface.SetTextColor( 255, 255, 255 )
+			surface.SetTextPos( ScrW()/3+100, ScrH()/2 - 230) 
+			surface.DrawText( "Right Click to select tower." )	
+		else
+			surface.SetFont( "HudHintTextLarge" )
+			surface.SetTextColor( 255, 255, 255 )
+			surface.SetTextPos( ScrW()/3+100, ScrH()/2 - 200) 
+			surface.DrawText( "Press 'Q' or 'E' to Rotate." )	
 
-		if k == selected then
-			surface.SetDrawColor(245, 189, 31, 190)
-			surface.DrawRect(_x,ScrH()/2-50, 100, 100)
+			surface.SetFont( "gtd:TestFont" )
+			surface.SetTextColor( 240, 0, 0 )
+			surface.SetTextPos( ScrW()/3+100, ScrH()/2 - 230) 
+			surface.DrawText( "Press 'R' to cancel placement." )	
 		end
 
-		surface.SetFont( "Default" )
-		surface.SetTextColor( 255, 255, 255 )
-		surface.SetTextPos( _x, ScrH()/2-100 ) 
-		surface.DrawText( k )
+		if !LocalPlayer():GetholdingBP() then
+			local spacing = 125
+			local inInfo = false
+			for k, v in pairs( PlacementSystem.Objects ) do
 
-		surface.SetFont( "Default" )
-		surface.SetTextColor( 255, 255, 255 )
-		surface.SetTextPos( _x, ScrH()/2-100 ) 
-		surface.DrawText( k )	
+				local _x = ScrW()/2 + spacing * k - ((spacing)*selected)-50
 
-		surface.SetFont( "HudHintTextLarge" )
-		surface.SetTextColor( 255, 255, 255 )
-		surface.SetTextPos( _x, ScrH()/2-70) 
-		surface.DrawText( v.Name )	
+				surface.SetDrawColor(255,255,255,255)
+				surface.DrawOutlinedRect(  _x, ScrH()/2-50, 100, 100 )
 
-		surface.SetFont( "Default" )
-		surface.SetTextColor( 255, 255, 255 )
-		surface.SetTextPos( _x+5, ScrH()/2 + 15) 
-		surface.DrawText( "Damage: " .. v.Damage )	
+				if k == selected then
+					surface.SetDrawColor(245, 189, 31, 190)
+					surface.DrawRect(_x,ScrH()/2-50, 100, 100)
+				end
 
-		surface.SetFont( "Default" )
-		surface.SetTextColor( 255, 255, 255 )
-		surface.SetTextPos( _x+5, ScrH()/2 +25) 
-		surface.DrawText( "Firerate: " .. v.FireRate )	
+				surface.SetFont( "Default" )
+				surface.SetTextColor( 255, 255, 255 )
+				surface.SetTextPos( _x, ScrH()/2-100 ) 
+				surface.DrawText( k )
 
-		surface.SetFont( "Default" )
-		surface.SetTextColor( 255, 255, 255 )
-		surface.SetTextPos( _x+5, ScrH()/2 +35) 
-		surface.DrawText( "Health: " .. v.Health )	
+				surface.SetFont( "Default" )
+				surface.SetTextColor( 255, 255, 255 )
+				surface.SetTextPos( _x, ScrH()/2-100 ) 
+				surface.DrawText( k )	
+
+				surface.SetFont( "HudHintTextLarge" )
+				surface.SetTextColor( 255, 255, 255 )
+				surface.SetTextPos( _x, ScrH()/2-70) 
+				surface.DrawText( v.Name )	
+
+				surface.SetFont( "Default" )
+				surface.SetTextColor( 255, 255, 255 )
+				surface.SetTextPos( _x+5, ScrH()/2 + 15) 
+				surface.DrawText( "Damage: " .. v.Damage )	
+
+				surface.SetFont( "Default" )
+				surface.SetTextColor( 255, 255, 255 )
+				surface.SetTextPos( _x+5, ScrH()/2 +25) 
+				surface.DrawText( "Firerate: " .. v.FireRate )	
+
+				surface.SetFont( "Default" )
+				surface.SetTextColor( 255, 255, 255 )
+				surface.SetTextPos( _x+5, ScrH()/2 +35) 
+				surface.DrawText( "Health: " .. v.Health )	
 
 
-		surface.SetFont( "HudHintTextLarge" )
-		surface.SetTextColor( 255, 255, 255 )
-		surface.SetTextPos( _x, ScrH()/2+50) 
-		surface.DrawText( "$" .. v.Price )	
+				surface.SetFont( "HudHintTextLarge" )
+				surface.SetTextColor( 255, 255, 255 )
+				surface.SetTextPos( _x, ScrH()/2+50) 
+				surface.DrawText( "$" .. v.Price )	
 
-		drawPlacementModel( k, _x )
+				drawPlacementModel( k, _x )
 
-	end
+			end
 
-    surface.SetDrawColor(0,0,0,190)
-    surface.DrawRect(0,0,ScrW(),ScrH())
+		    surface.SetDrawColor(0,0,0,90)
+		    surface.DrawRect(0,0,ScrW(),ScrH())
+		   else
+		   	dontdrawPlacementModels()
+		end
 
-    if cooldown > CurTime() then return end
+	    if cooldown > CurTime() then return end
 
-    if input.IsKeyDown( KEY_E ) then // cycle right
-    	cooldown = CurTime() + .5
-    	selected = math.Clamp(selected + 1, 1, table.Count(PlacementSystem.Objects))
-    end
+	    if input.IsKeyDown( KEY_E ) then // cycle right
+	    	-- if not blueprint then scroll
+	    	-- if blueprint then rotate
+	    	if !LocalPlayer():GetholdingBP() then
+		    	cooldown = CurTime() + .5
+		    	selected = math.Clamp(selected + 1, 1, table.Count(PlacementSystem.Objects))
+		    else
+		    	-- rotate current tower
+		    end
+	    end
 
-    if input.IsKeyDown( KEY_Q ) then // cycle left
-    	cooldown = CurTime() + .5
-    	selected = math.Clamp(selected - 1, 1, table.Count(PlacementSystem.Objects))
-    end
+	    if input.IsKeyDown( KEY_Q ) then // cycle left
+	    	-- if not blueprint then scroll
+	    	-- if blueprint then rotate
+	    	if !LocalPlayer():GetholdingBP() then
+		    	cooldown = CurTime() + .5
+		    	selected = math.Clamp(selected - 1, 1, table.Count(PlacementSystem.Objects))
+		    else
+		    	-- rotate current tower
+		    end
+	    end
 
-end)
+	    if input.IsKeyDown( KEY_R ) then // cycle left
+	    	-- if not blueprint then scroll
+	    	-- if blueprint then rotate
+	    	if LocalPlayer():GetholdingBP() then
+		    	cooldown = CurTime() + 1.5
+		    	selected = math.Clamp(selected - 1, 1, table.Count(PlacementSystem.Objects))
+
+				net.Start("GTD:PlacementSystem:CancelPrePlace")
+				net.SendToServer()
+
+				chat.AddText("Blueprint removed...")
+		    end
+	    end
+
+	    -- if blueprint ignore
+	    if input.IsMouseDown( MOUSE_RIGHT ) and !LocalPlayer():GetholdingBP() then
+	    	cooldown = CurTime() + 1
+	    	chat.AddText("Tower Selected: " .. PlacementSystem.Objects[ selected ].Name )
+
+	    	net.Start("GTD:PlacementSystem:StartPrePlace")
+	    	 net.WriteInt(selected, 32)
+	    	net.SendToServer()
+	    end
+
+	end)
+
+end

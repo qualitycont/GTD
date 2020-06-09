@@ -56,6 +56,6 @@ _includeCL("ui/levelup_notify.lua")
 
 -- placement
 
-_includeCL("core/placement/player_placement.lua")
-_includeCL("core/placement/placement_blueprint.lua")
+_includeSH("core/placement/player_placement.lua")
+_includeSH("core/placement/placement_blueprint.lua")
 
