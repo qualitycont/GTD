@@ -1,13 +1,12 @@
-
 concommand.Add("td_class", function(ply, _, args)
-    if GM.RoundManager:GetState() == GM.RoundManager.States.ROUND then return end
+    if GAMEMODE.RoundManager:GetState() == GAMEMODE.RoundManager.States.ROUND then return end
     
     local class = args[1]
 
     ply:SetTDClass(class)
     ply:StripClassWeapons()
     if ply:Alive() then
-        player_GM.RoundManager.RunClass(ply,"Loadout")
+        player_manager.RunClass(ply,"Loadout")
     end
 end)
 
@@ -20,7 +19,7 @@ concommand.Add("td_perk", function(ply, _, args)
 end)
 
 concommand.Add("td_listclasses", function(ply)
-    PrintTable(GM.ClassManager.GetAll())
+    PrintTable(GAMEMODE.ClassManager.GetAll())
 end)
 
 
