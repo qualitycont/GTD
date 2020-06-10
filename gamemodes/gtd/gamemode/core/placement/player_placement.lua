@@ -1,55 +1,23 @@
 -- Taser models/weapons/w_eq_taser.mdl
 -- heavy models/weapons/w_mach_m249para.mdl
 -- pistol models/weapons/w_pist_p250.mdl
+
+-- Shared stuff
+
+PlacementSystem = PlacementSystem or {}
+PlacementSystem.Objects = PlacementSystem.Objects or GM.TowerManager.GetAll()
+
+local function _checkForNil(val)
+	if val == nil then 
+		return "N/A"
+	else 
+		return val 
+	end
+end
+
 if SERVER then
-	util.AddNetworkString("GTD:PlacementSystem:Init")
-	util.AddNetworkString("GTD:PlacementSystem:StartPrePlace")
-	util.AddNetworkString("GTD:PlacementSystem:CancelPrePlace")
-
-	PlacementSystem = PlacementSystem or {}
-	PlacementSystem.Objects = PlacementSystem.Objects or {
-		[1] = {
-			Name = "Pistol Tower",
-			Model = "models/weapons/w_eq_taser.mdl",
-			Damage = 3,
-			FireRate = 0.6,
-			Health = 100,
-			Price = 120
-		},
-		[2] = {
-			Name = "Pistol Tower",
-			Model = "models/weapons/w_eq_taser.mdl",
-			Damage = 3,
-			FireRate = 0.6,
-			Health = 100,
-			Price = 120
-		},
-		[3] = {
-			Name = "Pistol Tower",
-			Model = "models/weapons/w_eq_taser.mdl",
-			Damage = 3,
-			FireRate = 0.6,
-			Health = 100,
-			Price = 120
-		},
-		[4] = {
-			Name = "Pistol Tower",
-			Model = "models/weapons/w_eq_taser.mdl",
-			Damage = 3,
-			FireRate = 0.6,
-			Health = 100,
-			Price = 120
-		},
-		[5] = {
-			Name = "cee is gay",
-			Model = "models/weapons/w_eq_taser.mdl",
-			Damage = 3,
-			FireRate = 0.6,
-			Health = 100,
-			Price = 120
-		}
-
-	}
+	util.AddNetworkString("GTD_PlacementSystem_StartPrePlace")
+	util.AddNetworkString("GTD_PlacementSystem_CancelPrePlace")
 
 	function PlacementSystem.PlaceBlueprint( plyPlacing, towerIndex )
 		print("BP MODE: -> ", plyPlacing:Nick(), towerIndex)
@@ -77,21 +45,13 @@ if SERVER then
 
 	end
 
-	hook.Add("PlayerInitialSpawn", "GTD:PlacementSystem_Objects:InitSendCopy", function(ply)
-		net.Start("GTD:PlacementSystem:Init")
-		 net.WriteTable(PlacementSystem.Objects)
-		net.Send(ply)
-	end)
-
-
-
-	net.Receive("GTD:PlacementSystem:StartPrePlace", function(len, ply)
+	net.Receive("GTD_PlacementSystem_StartPrePlace", function(len, ply)
 		-- start the towerplace ( i.e blueprint )
 		local towerIndex = net.ReadInt(32)
 		PlacementSystem.PlaceBlueprint( ply, towerIndex )
 	end)
 
-	net.Receive("GTD:PlacementSystem:CancelPrePlace", function(len, ply) -- cee being lazy ;p
+	net.Receive("GTD_PlacementSystem_CancelPrePlace", function(len, ply) -- cee being lazy ;p
 		for k, v in pairs( ents.FindByClass("td_tower_base") ) do
 			if v:IsPlayer() then continue end;
 			if !IsValid(v) then continue end;
@@ -105,51 +65,27 @@ if SERVER then
 		end
 	end)
 
-
 else
 
-surface.CreateFont( "gtd:TestFont", {
-	font = "Arial", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-	extended = false,
-	size = 33,
-	weight = 500,
-	blursize = 0,
-	scanlines = 0,
-	antialias = true,
-	underline = false,
-	italic = false,
-	strikeout = false,
-	symbol = false,
-	rotary = false,
-	shadow = false,
-	additive = false,
-	outline = false,
-})
-
-
-
+	surface.CreateFont( "gtd:TestFont", {
+		font = "Arial", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
+		extended = false,
+		size = 33,
+		weight = 500,
+		blursize = 0,
+		scanlines = 0,
+		antialias = true,
+		underline = false,
+		italic = false,
+		strikeout = false,
+		symbol = false,
+		rotary = false,
+		shadow = false,
+		additive = false,
+		outline = false,
+	})
 
 	-- Clientside
-
-
-
-
-
-	PlacementSystem = PlacementSystem or {}
-	PlacementSystem.Objects = PlacementSystem.Objects
-
-	net.Receive("GTD:PlacementSystem:Init", function()
-
-		print("-- Client received from server! --")
-		print("-- Client received from server! --")
-		print("-- Client received from server! --")
-		print("-- Client received from server! --")
-
-		local Towers = net.ReadTable()
-		PlacementSystem.Objects = Towers
-	end)
-
-	--if CLIENT then return end;
 
 	local function dontdrawPlacementModels()
 		for k, v in pairs ( PlacementSystem.Objects ) do
@@ -259,23 +195,23 @@ surface.CreateFont( "gtd:TestFont", {
 				surface.SetFont( "Default" )
 				surface.SetTextColor( 255, 255, 255 )
 				surface.SetTextPos( _x+5, ScrH()/2 + 15) 
-				surface.DrawText( "Damage: " .. v.Damage )	
+				surface.DrawText( "Damage: " .. _checkForNil(v.Damage) )	
 
 				surface.SetFont( "Default" )
 				surface.SetTextColor( 255, 255, 255 )
 				surface.SetTextPos( _x+5, ScrH()/2 +25) 
-				surface.DrawText( "Firerate: " .. v.FireRate )	
+				surface.DrawText( "Firerate: " .. _checkForNil(v.FireRate) )	
 
 				surface.SetFont( "Default" )
 				surface.SetTextColor( 255, 255, 255 )
 				surface.SetTextPos( _x+5, ScrH()/2 +35) 
-				surface.DrawText( "Health: " .. v.Health )	
+				surface.DrawText( "Health: " .. _checkForNil(v.Health) )	
 
 
 				surface.SetFont( "HudHintTextLarge" )
 				surface.SetTextColor( 255, 255, 255 )
 				surface.SetTextPos( _x, ScrH()/2+50) 
-				surface.DrawText( "$" .. v.Price )	
+				surface.DrawText( "$" .. _checkForNil(v.Price) )	
 
 				drawPlacementModel( k, _x )
 
@@ -318,7 +254,7 @@ surface.CreateFont( "gtd:TestFont", {
 		    	cooldown = CurTime() + 1.5
 		    	selected = math.Clamp(selected - 1, 1, table.Count(PlacementSystem.Objects))
 
-				net.Start("GTD:PlacementSystem:CancelPrePlace")
+				net.Start("GTD_PlacementSystem_CancelPrePlace")
 				net.SendToServer()
 
 				chat.AddText("Blueprint removed...")
@@ -330,7 +266,7 @@ surface.CreateFont( "gtd:TestFont", {
 	    	cooldown = CurTime() + 1
 	    	chat.AddText("Tower Selected: " .. PlacementSystem.Objects[ selected ].Name )
 
-	    	net.Start("GTD:PlacementSystem:StartPrePlace")
+	    	net.Start("GTD_PlacementSystem_StartPrePlace")
 	    	 net.WriteInt(selected, 32)
 	    	net.SendToServer()
 	    end

@@ -59,7 +59,6 @@ function ENT:KeyValue(key, value)
     end
 
 	key = string.lower(key)
-    print("keyvalue k:"..key.."v:"..value)
 	if key == "starthealth" then
 		self.starthealth = value
     elseif key == "regen" then
