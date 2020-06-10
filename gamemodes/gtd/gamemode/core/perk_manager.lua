@@ -83,6 +83,8 @@ if SERVER then
     end)
 
     hook.Add("EntityTakeDamage", "GTD_Perk_Damage_Modifiers", function(target, dmg)
+        if target:GetClass() == "info_td_core" then return end -- Workaround: When a tower gets destroyed, it registers as player for some reason
+
         local atk = dmg:GetAttacker()
 
         local scale = 1
@@ -97,7 +99,7 @@ if SERVER then
         end
 
         if target:IsPlayer() then
-            for _, perk in pairs(atk:GetEquippedPerks()) do
+            for _, perk in pairs(target:GetEquippedPerks()) do
                 if perk.Modifier == manager.Modifiers.LESS_DAMAGE then
                     if not perk.ModifierCondition(target, dmg) then continue end
                     scale = scale * (1-perk.ModifierPower)

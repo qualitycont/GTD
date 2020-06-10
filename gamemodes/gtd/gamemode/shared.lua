@@ -48,6 +48,7 @@ _includeSV("core/economy.lua")
 
 -- actual content
 _includeSH("ext/default_classes.lua")
+_includeSH("ext/default_towers.lua")
 _includeSH("ext/default_perks.lua")
 _includeSV("ui/networking_sv.lua")
 _includeCL("ui/class_select.lua")
@@ -56,6 +57,6 @@ _includeCL("ui/levelup_notify.lua")
 
 -- placement
 
-_includeCL("core/placement/player_placement.lua")
-_includeCL("core/placement/placement_blueprint.lua")
+_includeSH("core/placement/player_placement.lua")
+_includeSH("core/placement/placement_blueprint.lua")
 

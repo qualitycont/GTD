@@ -1,8 +1,5 @@
-local manager = GM.RoundManager --makes typing easier
-local manager2 = GM.ClassManager --i dont need to make this easier but i still need to use it for some reason
-
 concommand.Add("td_class", function(ply, _, args)
-    if manager:GetState() == manager.States.ROUND then return end
+    if GAMEMODE.RoundManager:GetState() == GAMEMODE.RoundManager.States.ROUND then return end
     
     local class = args[1]
 
@@ -22,7 +19,7 @@ concommand.Add("td_perk", function(ply, _, args)
 end)
 
 concommand.Add("td_listclasses", function(ply)
-    PrintTable(manager2.GetAll())
+    PrintTable(GAMEMODE.ClassManager.GetAll())
 end)
 
 
