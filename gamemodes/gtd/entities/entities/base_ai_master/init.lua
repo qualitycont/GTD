@@ -2,43 +2,78 @@ include("shared.lua")
 
 ENT.m_fMaxYawSpeed = 200
 
-function ENT:RunAnim(enum)
-	if self:GetActivity() == enum then return end
-	self:StartActivity(enum)
-	--print(self.mode)
-end
+-- list.Set( "NPC", "combine1", {
+-- 	Name = "combine",
+-- 	Class = "combine1",
+-- 	Category = "NextBot"
+-- })
 
 function ENT:Initialize()
+	self.followers = {}
+	self.difficulty = 1
 	self:TypeSpecific()
 
-	self.range = 100
 	self.target = nil 
 	self:FindTarget()
 	--PrintTable(self:GetSequenceList())
 end
 
+function ENT:RunAnim(enum)
+	if self:GetActivity() == enum then return end
+	self:UpdateFollowers()
+	self:StartActivity(enum)
+--	print(self.mode)
+end
+
+function ENT:SpawnFollowers()
+	for i=1,self.difficulty do
+		local follower = ents.Create("base_ai_follower")
+		follower:SetPos(self:GetPos()-Vector(0,50,0))
+		follower:Spawn()
+		follower:SetAngles(self:GetAngles())
+		follower.master = self
+		table.insert(self.followers,follower)
+	end
+end
+
+function ENT:UpdateFollowers()
+	if table.IsEmpty(self.followers) then return end 
+	for k,v in pairs(self.followers) do
+		if IsValid(v) then 
+			v.mode = self.mode 
+			v.target = self.target
+		else 
+			table.remove(self.followers,k)
+		end
+	end
+end
+
 function ENT:TypeSpecific()
-	self:SetModel("models/police.mdl")
+	self:SetModel("models/Zombie/Classic_legs.mdl")
 	self:SetHealth(100)
 	self:DropToFloor()
+	self.range = 200
+	self:SpawnFollowers()
+	self.RUN = ACT_RUN
+	self.IDLE = ACT_COWER
 end
 
 -- no core
 function ENT:Idle()
-	self:RunAnim(ACT_COWER)
+	self:RunAnim(self.IDLE)
 end
 
 -- moving to core
 function ENT:Core() 
 	if self.target == nil then return end
-	self:RunAnim(ACT_RUN)
+	self:RunAnim(self.RUN)
 	self:MoveToPos(self.target:GetPos())
 end
 
 -- targeting player
 function ENT:Ply()
-	self:RunAnim(ACT_RUN)
-	self:MoveToPlayer(self.target:GetPos())
+	self:RunAnim(self.RUN)
+	self:MoveToPosition(self.target:GetPos())
 end
 
 -- attacking tower
@@ -72,8 +107,7 @@ end
 
 function ENT:SetTargetCore()
 	local c = ents.FindByClass("info_td_core")
-	if table.IsEmpty(c) then self.mode = "idle" end
-
+	if table.Count(c) == 0 then self.mode = "idle" return end
 	local n = math.random(1,table.Count(c))
 	self.target = c[n]
 	self.mode = "core"
@@ -102,14 +136,14 @@ function ENT:OnInjured(info)
 	end
 end
 
-function ENT:MoveToPlayer(options)
+function ENT:MoveToPosition(options)
 
     local options = options or {}
 
     local path = Path( "Follow" )
 
     path:SetMinLookAheadDistance(options.lookahead or 325)
-
+ 
     path:SetGoalTolerance(options.tolerance or 20)
 
     path:Compute(self, self.target:GetPos())     
