@@ -249,7 +249,6 @@ hook.Add("HUDPaint", "GTD_Placement", function()
     	local selectedTower = PlacementSystem.Objects[ selected ]
     	chat.AddText("Tower Selected: " .. selectedTower.Name )
 
-
     	PlacementSystem.PlaceBlueprint( selectedTower )
     end
 
@@ -258,17 +257,23 @@ hook.Add("HUDPaint", "GTD_Placement", function()
 
     	if IsValid(PlacementSystem.CurrentBluePrint) then
     		
-
     		local CSM = PlacementSystem.CurrentBluePrint
 
     		CSM:SetPos( CSM:GetPos() )
     		CSM:SetAngles( CSM:GetAngles() )
-
     		LocalPlayer():SetholdingBP( false )
+
+    		CSM:Remove()
+
+    		net.Start("GTD:PlacementSystem:PlaceTower")
+    		 net.WriteInt(selected, 32)
+    		 net.WriteVector(CSM:GetPos())
+    		 net.WriteAngle(CSM:GetAngles())
+    		net.SendToServer()
+
     	end
-
     end
-
 end)
+
 
 

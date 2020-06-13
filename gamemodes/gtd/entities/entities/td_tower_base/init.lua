@@ -16,15 +16,54 @@ function ENT:Initialize()
 
     self.isBluePrint = nil
     self.Owner = nil
+
+    self.hasEnemy = nil
+    self.objEnemy = nil
+
+    self:FindTowerEnemy()
+
 end
 
 function ENT:Use(activator, caller)
     return
 end
 
+
+function ENT:FindTowerEnemy()
+	for k, v in pairs(ents.FindInSphere( self:GetPos(), self:GetTowerRange() or 1 ) ) do
+		if v == self then continue end;
+        if v:IsPlayer() then continue end;
+        
+			self.hasEnemy = true
+			self.objEnemy = v
+
+            self:SethasEnemy( self.hasEnemy )
+            self:SetobjEnemy( self.objEnemy )
+
+            Entity(1):ChatPrint( tostring(self.hasEnemy) )
+            Entity(1):ChatPrint( tostring(self.objEnemy) )
+		--end
+	end
+end
+
 function ENT:Think()
-   -- if self.Owner != nil and self.isBluePrint == true then
-     --   self:SetPos(self.Owner:GetEyeTrace().HitPos)
-       --self:SetColor(Color(0,0,0,100))
-    --end
+
+	if self.hasEnemy then
+        if IsValid(self.objEnemy) then
+    		self:PointAtEntity( self.objEnemy )
+            self:SetAngles(Angle(0,self:GetAngles()[2],0) )
+
+        --    local tr = util.TraceLine( {
+        --        start = self:GetPos() - Vector(0,0,-60),
+       --         endpos = self:GetPos() + self:GetForward() * 500,
+        --        filter = function( ent ) if ( ent:GetClass() == "prop_physics" ) then return true end end
+        --    } )
+
+        --   Entity(1):ChatPrint( tostring(tr.HitPos) )
+        --   Entity(1):ChatPrint( tostring(tr.Entity) )
+          else
+            Entity(1):ChatPrint(" enemy obj not valid ")
+        end
+
+	end
 end

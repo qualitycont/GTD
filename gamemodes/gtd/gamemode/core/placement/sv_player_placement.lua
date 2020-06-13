@@ -2,9 +2,8 @@
 -- heavy models/weapons/w_mach_m249para.mdl
 -- pistol models/weapons/w_pist_p250.mdl
 
-util.AddNetworkString("GTD:PlacementSystem:Init")
-util.AddNetworkString("GTD:PlacementSystem:StartPrePlace")
-util.AddNetworkString("GTD:PlacementSystem:CancelPrePlace")
+util.AddNetworkString("GTD:PlacementSystem:PlaceTower")
+
 
 -- caching clientside models
 util.PrecacheModel( "models/Combine_turrets/Floor_turret.mdl" )
@@ -12,37 +11,29 @@ util.PrecacheModel( "models/Combine_turrets/Floor_turret.mdl" )
 PlacementSystem = PlacementSystem or {}
 PlacementSystem.Objects = PlacementSystem.Objects or {}
 
---[[
 
-	* Tower Blueprints MOVED clientside!
+function PlacementSystem.placeTower( player, towerIndex, towerPos, towerAngle )
+	--if !PlacementSystem.Objects[ towerIndex ] then return end
+	--local CurrentTower = PlacementSystem.Objects[ towerIndex ];
 
-function PlacementSystem.PlaceBlueprint( plyPlacing, towerIndex )
+	local Tower = ents.Create("td_tower_base")
+	Tower:SetModel( "models/Combine_turrets/Floor_turret.mdl" ) 
+	Tower:SetTowerRange( 100 )
+	Tower:SetPos( towerPos )
+	Tower:SetAngles( towerAngle )
+	Tower:Spawn()
 
-	print("BP MODE: -> ", plyPlacing:Nick(), towerIndex)
-	plyPlacing:ChatPrint(" Starting to place tower...")
-
-	-- Player is now holding a blueprint
-	plyPlacing:SetholdingBP( true )
-
-	local idToTower = PlacementSystem.Objects[ towerIndex ]
-	local bp = ents.Create("td_tower_base")
-	bp:SetPos(plyPlacing:GetEyeTrace().HitPos)
-	bp:SetAngles(plyPlacing:GetAngles())
-	bp:SetModel("models/Combine_turrets/Floor_turret.mdl")
-	  bp:SetOwner( plyPlacing )
-	  bp:SetisBluePrint( true )
-	bp:Spawn()
-	bp.Think = function(_s)
-		print(_s:GetOwner())
-		if !_s:GetOwner() then return end
-		if !_s:GetisBluePrint() then return end
-
-		_s:SetPos( _s:GetOwner():GetEyeTrace().HitPos )
-	end
-
+	--net.Start("GTD:PlacementSystem:PlaceTower")
+	-- net.WriteInt(Tower)
 
 end
---]]
 
 
+net.Receive("GTD:PlacementSystem:PlaceTower", function(length, player)
+	local playerPlacing = player
+	local towerIndex = net.ReadInt(32)
+	local towerPos = net.ReadVector()
+	local towerAngle = net.ReadAngle()
 
+	PlacementSystem.placeTower( playerPlacing, towerIndex, towerPos, towerAngle )
+end)
