@@ -1,13 +1,27 @@
 include("shared.lua")
 
+local vOffset = Vector(0, 0, 60) -- constants
+local tDefaultTrace = {start = nil, endpos = nil, mask = MASK_OPAQUE_AND_NPCS, filter = nil} -- constants
+tDefaultTrace.output = tDefaultTrace -- Reuse the same table for the result for efficiency
+local nMaxTraceLength = math.sqrt(3) * 2 * 16384 -- Adjust this value for the max length of the beam
+local colBeam = Color(255, 0, 0)
+
+
 function ENT:Draw()
+
 	self:DrawModel()
 
-	if !IsValid(self:GetobjEnemy()) or !self:GethasEnemy() then return end
+	local vPos = self:GetPos()
+	vPos:Add(vOffset)
+	tDefaultTrace.start = vPos
 
-	local startAim = self:GetPos() - Vector(0,0,-60)
-	local endAim = self:GetPos()+self:GetForward()
+	local vForward = self:GetForward()
+	vForward:Mul(nMaxTraceLength)
+	vForward:Add(vPos)
+	tDefaultTrace.endpos = vForward
 
-	local Dist = self:GetPos():Distance( self:GetobjEnemy():GetPos() )
-	render.DrawLine( self:GetPos() - Vector(0,0,-60), self:GetPos()+self:GetForward() * 1000, Color( 255,0,0 ), true )
+	tDefaultTrace.filter = self
+
+	local tTrace = util.TraceLine(tDefaultTrace)
+	render.DrawLine(vPos, tTrace.HitPos, colBeam, true)
 end

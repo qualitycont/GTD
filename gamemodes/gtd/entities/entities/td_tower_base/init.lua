@@ -20,6 +20,11 @@ function ENT:Initialize()
     self.hasEnemy = nil
     self.objEnemy = nil
 
+    self.c_nMaxTraceLength = math.sqrt(3) * 2 * 16384 -- Adjust this value for the max length of the beam
+    self.c_vOffset = Vector(0, 0, 60)
+    self.c_tDefaultTrace = {start = nil, endpos = nil, mask = MASK_OPAQUE_AND_NPCS, filter = nil} -- constants
+    self.c_tDefaultTrace.output = self.c_tDefaultTrace -- Reuse the same table for the result for efficiency
+
     self:FindTowerEnemy()
 
 end
@@ -46,21 +51,35 @@ function ENT:FindTowerEnemy()
 	end
 end
 
+function ENT:ShootAtEnemy()
+    if !IsValid(self.objEnemy) or !self.hasEnemy then
+        self:FindTowerEnemy()
+    end
+
+end
+
 function ENT:Think()
 
 	if self.hasEnemy then
         if IsValid(self.objEnemy) then
+
     		self:PointAtEntity( self.objEnemy )
             self:SetAngles(Angle(0,self:GetAngles()[2],0) )
 
-        --    local tr = util.TraceLine( {
-        --        start = self:GetPos() - Vector(0,0,-60),
-       --         endpos = self:GetPos() + self:GetForward() * 500,
-        --        filter = function( ent ) if ( ent:GetClass() == "prop_physics" ) then return true end end
-        --    } )
 
-        --   Entity(1):ChatPrint( tostring(tr.HitPos) )
-        --   Entity(1):ChatPrint( tostring(tr.Entity) )
+            local vPos = self:GetPos()
+            vPos:Add(self.c_vOffset)
+            self.c_tDefaultTrace.start = vPos
+
+            local vForward = self:GetForward()
+            vForward:Mul(self.c_nMaxTraceLength)
+            vForward:Add(vPos)
+            self.c_tDefaultTrace.endpos = vForward
+
+            self.c_tDefaultTrace.filter = self
+
+            local tTrace = util.TraceLine(self.c_tDefaultTrace)
+
           else
             Entity(1):ChatPrint(" enemy obj not valid ")
         end
