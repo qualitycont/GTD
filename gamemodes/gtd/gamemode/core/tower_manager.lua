@@ -32,7 +32,7 @@ function manager:Register( info )
         Model = info.Model,
         Price = info.Price,
         Damage = info.Damage,
-        FireRate = info.FireRage,
+        FireRate = info.FireRate,
         Health = info.Health,
         Range = info.Range,
         RequiredClass = info.RequiredClass,

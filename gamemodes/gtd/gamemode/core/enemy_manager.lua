@@ -24,6 +24,8 @@ function manager:Register(info)
     local name = string.lower(info.Name)
     if not info.Class or enemytypes[name] then return end
 
+    info.Tokens = info.Tokens or 10
+
     info.Health = info.Health or 100
     info.Speed = info.Speed or 250
 
@@ -35,6 +37,7 @@ function manager:Register(info)
 
     enemytypes[name] = {
         Health = info.Health,
+        Tokens = info.Tokens,
         Speed = info.Speed,
         Type = info.Type,
         Size = info.Size,
