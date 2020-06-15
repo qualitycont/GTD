@@ -16,20 +16,6 @@ function GM:HUDPaint()
 
 	hp = Lerp(0.01,hp,LocalPlayer():Health())
 
-	-- waves
-	draw.RoundedBox(12,w*0.35,h*0.015,w*0.25,h*0.03,Color(57, 187, 204))
-
-	local core = ents.FindByClass("info_td_core")
-	local c = table.Count(core)
-	local w2 = 0.325
-	for k,v in pairs(core) do 
-		--if core.On then 
-			draw.RoundedBox(12,w*w2,h*0.053,w*(0.293/c),h*0.022,Color(45,45,45))
-			draw.RoundedBox(12,w*w2,h*0.053,w*(0.293/c),h*0.022,Color(230, 97, 90))
-			w2 = ((0.3/c)*k)+0.324
-		--end
-	end
-
 	surface.SetDrawColor(255,255,255)
 	surface.SetMaterial(mat)
 	surface.DrawTexturedRect(w*0.0485,h*0.883,w*0.155,h*0.05)
@@ -42,7 +28,7 @@ function GM:HUDPaint()
 
 	surface.SetDrawColor(255,255,255)
 	surface.SetMaterial(mat2)
-	surface.DrawTexturedRect(w*0.064,h*0.895,(hp*w)*0.00126,h*0.024)
+	surface.DrawTexturedRect(w*0.064,h*0.895,(w/hp)*12.5,h*0.024)
 	surface.SetDrawColor(255,255,255)
 
 	surface.SetDrawColor(255,255,255)

@@ -31,7 +31,7 @@ end
 _includeSH("config/config.lua")
 _includeSH("config/economy.lua")
 
--- Backend Functions
+-- core stuff
 _includeSH("core/util.lua")
 _includeSV("core/enemy_manager.lua")
 _includeSV("core/round_manager.lua")
@@ -39,19 +39,16 @@ _includeSH("core/class_manager.lua")
 _includeSH("core/perk_manager.lua")
 _includeSH("core/tower_manager.lua")
 
--- Functionality
+-- functionality stuff
 _includeSH("core/player_ext.lua")
 _includeSV("core/player_ext_sv.lua")
 _includeSH("core/concommand.lua")
 _includeSH("player_class/player_td.lua")
 _includeSV("core/economy.lua")
 
--- content
+-- actual content
 _includeSH("ext/default_classes.lua")
 _includeSH("ext/default_perks.lua")
-_includeSH("ext/default_towers.lua")
-
--- UI
 _includeSV("ui/networking_sv.lua")
 _includeCL("ui/class_select.lua")
 _includeCL("ui/perk_select.lua")

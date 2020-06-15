@@ -3,7 +3,7 @@
 -- pistol models/weapons/w_pist_p250.mdl
 
 PlacementSystem = PlacementSystem or {}
-PlacementSystem.Objects = PlacementSystem.Objects or GM.TowerManager.GetAll() or {
+PlacementSystem.Objects = PlacementSystem.Objects or {
 	[1] = {
 		Name = "Pistol Tower",
 		Model = "models/weapons/w_eq_taser.mdl",

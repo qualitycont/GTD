@@ -33,7 +33,6 @@ end
 function PLAYER:Loadout()
     local class = _checkAndGetClass(self.Player)
     self.Player:Give("weapon_fists")
-    self.Player:Give("weapon_pda")
     for _, v in pairs(class.Weapons) do
         self.Player:Give(v)
     end

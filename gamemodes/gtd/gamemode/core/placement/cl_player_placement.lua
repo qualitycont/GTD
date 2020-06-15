@@ -100,7 +100,7 @@ end
 local selected = 1
 hook.Add("HUDPaint", "GTD_Placement", function()
 
-	if not LocalPlayer():Alive() or not IsValid(LocalPlayer():GetActiveWeapon()) or LocalPlayer():GetActiveWeapon():GetClass() != "weapon_pda" then 
+	if not LocalPlayer():Alive() or not IsValid(LocalPlayer():GetActiveWeapon()) or LocalPlayer():GetActiveWeapon():GetClass() != "weapon_crowbar" then 
 		dontdrawPlacementModels()
 		return
 	end
@@ -185,7 +185,7 @@ hook.Add("HUDPaint", "GTD_Placement", function()
 
 	    surface.SetDrawColor(0,0,0,90)
 	    surface.DrawRect(0,0,ScrW(),ScrH())
-	else
+	   else
 	   	dontdrawPlacementModels()
 	end
 
@@ -261,7 +261,7 @@ hook.Add("HUDPaint", "GTD_Placement", function()
 
     		CSM:SetPos( CSM:GetPos() )
     		CSM:SetAngles( CSM:GetAngles() )
-    		--LocalPlayer():SetholdingBP( false )
+    		LocalPlayer():SetholdingBP( false )
 
     		CSM:Remove()
 
