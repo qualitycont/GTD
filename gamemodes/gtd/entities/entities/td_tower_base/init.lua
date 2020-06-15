@@ -80,7 +80,7 @@ function ENT:Think()
 
             local tTrace = util.TraceLine(self.c_tDefaultTrace)
 
-          else
+        else
             Entity(1):ChatPrint(" enemy obj not valid ")
         end
 

@@ -1,5 +1,6 @@
 include("shared.lua")
 
+local m_objEnemy; -- no need to set var/get nwvar every frame, so lets cache...
 local vOffset = Vector(0, 0, 60) -- constants
 local tDefaultTrace = {start = nil, endpos = nil, mask = MASK_OPAQUE_AND_NPCS, filter = nil} -- constants
 tDefaultTrace.output = tDefaultTrace -- Reuse the same table for the result for efficiency
@@ -10,6 +11,10 @@ local colBeam = Color(255, 0, 0)
 function ENT:Draw()
 
 	self:DrawModel()
+
+	if !IsValid(m_objEnemy) then
+		m_objEnemy = self:GetobjEnemy() -- Tower's Enemy
+	end
 
 	local vPos = self:GetPos()
 	vPos:Add(vOffset)

@@ -3,45 +3,46 @@
 -- pistol models/weapons/w_pist_p250.mdl
 
 PlacementSystem = PlacementSystem or {}
-PlacementSystem.Objects = PlacementSystem.Objects or GM.TowerManager.GetAll() or {
+PlacementSystem.Objects = PlacementSystem.Objects or {
 	[1] = {
 		Name = "Pistol Tower",
-		Model = "models/weapons/w_pist_p250.mdl",
-		Damage = 12,
-		FireRate = 1.2,
-		Health = 100,
-		Price = 50
-	},
-	[2] = {
-		Name = "Taser Tower",
 		Model = "models/weapons/w_eq_taser.mdl",
 		Damage = 3,
-		FireRate = 1.5,
+		FireRate = 0.6,
+		Health = 100,
+		Price = 120
+	},
+	[2] = {
+		Name = "Pistol Tower",
+		Model = "models/weapons/w_eq_taser.mdl",
+		Damage = 3,
+		FireRate = 0.6,
 		Health = 100,
 		Price = 120
 	},
 	[3] = {
-		Name = "Shotgun Tower",
-        Model = "models/weapons/w_shot_xm1014.mdl",
-        Price = 350,
-        Damage = 36,
-        FireRate = 1.5,
-        Health = 200
+		Name = "Pistol Tower",
+		Model = "models/weapons/w_eq_taser.mdl",
+		Damage = 3,
+		FireRate = 0.6,
+		Health = 100,
+		Price = 120
 	},
 	[4] = {
-		Name = "Heavy Tower",
-		Model = "models/weapons/w_mach_m249para.mdl",
-		Damage = 15,
+		Name = "Pistol Tower",
+		Model = "models/weapons/w_eq_taser.mdl",
+		Damage = 3,
 		FireRate = 0.6,
-		Health = 200,
-		Price = 500
+		Health = 100,
+		Price = 120
 	},
-    [5] = {
-        Name = "Sniper Tower",
-        Model = "models/weapons/w_snip_scout.mdl",
-        Price = 750,
-        Damage = 80,
-        FireRate = 2.4,
-        Health = 200
-    }
+	[5] = {
+		Name = "cee is gay",
+		Model = "models/weapons/w_eq_taser.mdl",
+		Damage = 3,
+		FireRate = 0.6,
+		Health = 100,
+		Price = 120
+	}
+
 }
