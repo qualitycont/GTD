@@ -38,9 +38,11 @@ local function _spawnEnemies(amount)
 end
 
 local function _startNextRound()
+    state = manager.States.ROUND
+
     local nextfire = 5 + GM.Util.Deviation(10)
     local moreToSpawn = true
-    while moreToSpawn and  do
+    while moreToSpawn do
         nextfire = 5 + GM.Util.Deviation(10)
         timer.Create("GTD_EnemySpawnTimer", nextfire, 1, function()
             if not _spawnEnemies(math.random(2,2+math.random(8))) then moreToSpawn = false end
@@ -61,10 +63,15 @@ function manager:GenerateNextWave()
     end
 end
 
+function manager:GetState()
+    return state
+end
+
 function manager:EndRound(win)
     if timer.Exists("GTD_EnemySpawnTimer") then timer.Destroy("GTD_EnemySpawnTimer") end
 
     state = manager.State.Prepare
+
     if win then
         wave = wave + 1
         -- TODO: Add money?
