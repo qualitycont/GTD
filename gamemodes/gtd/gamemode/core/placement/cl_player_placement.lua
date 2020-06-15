@@ -36,6 +36,10 @@ function PlacementSystem.PlaceBlueprint( towerTbl )
 	PlacementSystem.CurrentBluePrint = csEnt;
 	LocalPlayer():SetholdingBP( true )
 
+	net.Start("GTD:PlacementSystem:updPlaceTower")
+	 net.WriteBool( LocalPlayer():GetholdingBP() )
+	net.SendToServer()
+
 end
 
 
@@ -266,6 +270,7 @@ hook.Add("HUDPaint", "GTD_Placement", function()
     		CSM:Remove()
 
     		net.Start("GTD:PlacementSystem:PlaceTower")
+    		 net.WriteBool(LocalPlayer():GetholdingBP())
     		 net.WriteInt(selected, 32)
     		 net.WriteVector(CSM:GetPos())
     		 net.WriteAngle(CSM:GetAngles())
