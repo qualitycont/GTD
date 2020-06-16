@@ -15,9 +15,12 @@ manager.Difficulty = { -- while this is an Enum, these are also used for multipl
     INSANE = 3
 }
 
+-- local stuff
+
 local tokens = tokens or GM.Config.StartTokens * manager.Difficulty[GM.Config.Difficulty] -- used up for monster spawns
 local wave = wave or 1
 local waveEnemies = waveEnemies or {}
+local waveEnemyCount = waveEnemyCount or 0
 local state = manager.States.PREPARE
 
 local function _calculateTokens()
@@ -67,6 +70,11 @@ function manager:GetState()
     return state
 end
 
+function manager:GetWaveProgress()
+    local percentleft = table.Count(waveEnemies) / waveEnemyCount
+    return waveEnemyCount, percentleft
+end
+
 function manager:EndRound(win)
     if timer.Exists("GTD_EnemySpawnTimer") then timer.Destroy("GTD_EnemySpawnTimer") end
 
@@ -77,6 +85,19 @@ function manager:EndRound(win)
         -- TODO: Add money?
     end
 end
+
+hook.Add("GTD_ReadyStateChanged", "GTD_CheckIfAllPlayersReadiedUp", function(ply, state)
+    if !state then return end
+    
+    local plys = player.GetAll()
+    local allready = true
+
+    for k, v in ipairs(plys) do
+        if !v:IsReady() or (v == ply) then allready = false
+    end
+
+    if allready then _startNextRound() end
+end)
 
 --[[
 OLD CODE MADE FOR MANUAL WAVES

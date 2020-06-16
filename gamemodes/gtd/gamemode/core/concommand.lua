@@ -30,3 +30,7 @@ end)
 concommand.Add("td_currentperks",function(ply)
     PrintTable(ply:GetEquippedPerks())
 end)
+
+concommand.Add("td_toggleready", function(ply)
+    ply:ToggleReady()
+end)
