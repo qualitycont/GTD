@@ -141,7 +141,7 @@ end
 -- gets a random core for a target 
 function ENT:SetTargetCore()
 	if self.type == "follower" then return end 
-	local c = ents.FindByClass("sent_ball")
+	local c = ents.FindByClass("info_td_core")
 	if table.Count(c) == 0 then self.mode = "idle" self:UpdateFollowers() return end
 	local n = math.random(1,table.Count(c))
 	self.target = c[n]
