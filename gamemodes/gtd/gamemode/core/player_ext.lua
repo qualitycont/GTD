@@ -1,15 +1,23 @@
 local meta = FindMetaTable("Player")
 
 function meta:Ready()
+    if hook.Run("GTD_ReadyStateChanged", self, true) == false then return false end
     self:SetNWBool("GTD_Ready", true)
 end
 
 function meta:UnReady()
+    if hook.Run("GTD_ReadyStateChanged", self, false) == false then return false end
     self:SetNWBool("GTD_Ready", false)
 end
 
 function meta:ToggleReady()
-    self:SetNWBool("GTD_Ready", !self:GeNWBool("GTD_Ready"))
+    local set = !self:GetNWBool("GTD_Ready")
+    if hook.Run("GTD_ReadyStateChanged", self, set) == false then return false end
+    self:SetNWBool("GTD_Ready", set)
+end
+
+function meta:IsReady()
+    return self:GetNWBool("GTD_Ready")
 end
 
 function meta:GetNeededXP()

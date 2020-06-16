@@ -47,6 +47,7 @@ _includeSH("player_class/player_td.lua")
 _includeSV("core/economy.lua")
 
 -- content
+_includeSH("ext/default_enemies.lua")
 _includeSH("ext/default_classes.lua")
 _includeSH("ext/default_perks.lua")
 _includeSH("ext/default_towers.lua")
