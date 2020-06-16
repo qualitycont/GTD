@@ -4,6 +4,84 @@ GM.RoundManager = GM.RoundManger or {}
 local manager = GM.RoundManager
 
 manager.States = {
+    PREPARE = 0,
+    ROUND = 1
+}
+
+manager.Difficulty = { -- while this is an Enum, these are also used for multiplication so if you need to change your token calculation use this
+    EASY = 0.5,
+    NORMAL = 1,
+    HARD = 2,
+    INSANE = 3
+}
+
+local tokens = tokens or GM.Config.StartTokens * manager.Difficulty[GM.Config.Difficulty] -- used up for monster spawns
+local wave = wave or 1
+local waveEnemies = waveEnemies or {}
+local state = manager.States.PREPARE
+
+local function _calculateTokens()
+    local newtokens = GM.Config.StartTokens * manager.Difficulty[GM.Config.Difficulty]
+    return newtokens * wave * math.Clamp(GM.Util.Deviation(), 1, 2)
+end
+
+local function _spawnEnemies(amount)
+    for k, v in ipairs(waveEnemies) do
+        if amount <= 0 then return true end
+        if table.IsEmpty(waveEnemies) then return false end
+
+        GM.EnemyManager.Spawn(v.key)
+        table.remove(k)
+
+        amount = amount - 1
+    end
+end
+
+local function _startNextRound()
+    state = manager.States.ROUND
+
+    local nextfire = 5 + GM.Util.Deviation(10)
+    local moreToSpawn = true
+    while moreToSpawn do
+        nextfire = 5 + GM.Util.Deviation(10)
+        timer.Create("GTD_EnemySpawnTimer", nextfire, 1, function()
+            if not _spawnEnemies(math.random(2,2+math.random(8))) then moreToSpawn = false end
+        end)
+    end
+end
+
+function manager:GenerateNextWave()
+    local enemies = GM.EnemyManager.GetAll()
+
+    while tokens > 0 do
+        local enemy, key = table.Random(enemies)
+        if tokens >= enemy.Tokens then
+            enemy.key = key
+            table.insert(waveEnemies, enemy)
+            tokens = tokens - enemy.Tokens
+        end
+    end
+end
+
+function manager:GetState()
+    return state
+end
+
+function manager:EndRound(win)
+    if timer.Exists("GTD_EnemySpawnTimer") then timer.Destroy("GTD_EnemySpawnTimer") end
+
+    state = manager.State.Prepare
+
+    if win then
+        wave = wave + 1
+        -- TODO: Add money?
+    end
+end
+
+--[[
+OLD CODE MADE FOR MANUAL WAVES
+
+manager.States = {
     PREGAME = 0,
     ROUND = 1,
     PREPARE = 2,
@@ -103,18 +181,19 @@ end
 
 -- Wave Registration and Actual functionality
 
---[[
-    Takes a table as an argument
+Takes a table as an argument
 
-    Table structure:
-    {
-        Id, --Integer, number of the wave (Defaults to  the next highest number)
-        OnStart, --Function, runs when the wave starts (Parameters: force - was the wave forced to start?)
-        OnEnd --Function, runs when the wave ends (Parameters: force - was the wave forced to end?)
-    }
-]]
+Table structure:
+{
+    Id, --Integer, number of the wave (Defaults to  the next highest number)
+    OnStart, --Function, runs when the wave starts (Parameters: force - was the wave forced to start?)
+    OnEnd --Function, runs when the wave ends (Parameters: force - was the wave forced to end?)
+}
+
 
 function manager:RegisterWave(waveinfo)
     if not waveinfo.Id then waveinfo.Id = table.Count(waves) end
     waves[tableinfo.Id] = {OnStart = waveinfo.OnStart, OnEnd = waveinfo.OnEnd}
 end
+
+]]

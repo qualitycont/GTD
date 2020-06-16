@@ -83,6 +83,8 @@ if SERVER then
     end)
 
     hook.Add("EntityTakeDamage", "GTD_Perk_Damage_Modifiers", function(target, dmg)
+        if target:GetClass() == "info_td_core" then return end -- Workaround: When a tower gets destroyed, it registers as player for some reason
+
         local atk = dmg:GetAttacker()
 
         local scale = 1

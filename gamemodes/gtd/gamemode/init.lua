@@ -1,6 +1,9 @@
 AddCSLuaFile("shared.lua")
 include("shared.lua")
-include("ui/resource_auto.lua") -- Includes all resources/sounds/textures/etc
+
+resource.AddFile("/materials/background.jpg")
+resource.AddFile("/materials/hp.jpg")
+resource.AddFile("/materials/armor.jpg")
 
 function GM:PlayerSpawn(ply)
     if not ply:HasFirstSpawned() then
