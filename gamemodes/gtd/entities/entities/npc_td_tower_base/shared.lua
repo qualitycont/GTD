@@ -4,7 +4,7 @@ ENT.Base = "base_anim"
 ENT.PrintName = "Base Turret"
 
 function ENT:SetupDataTables()
-    self:NetworkVar("Entity", 0, "Owner")
+    self:NetworkVar("Entity", 0, "OwnerPly")
     self:NetworkVar("Entity", 1, "objEnemy")
 
     self:NetworkVar("Bool", 0, "isBluePrint")

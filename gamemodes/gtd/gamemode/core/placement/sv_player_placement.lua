@@ -18,7 +18,7 @@ function PlacementSystem.placeTower( player, holdingBP, towerIndex, towerPos, to
 
 	player:SetholdingBP( holdingBP )
 
-	local Tower = ents.Create("td_tower_base")
+	local Tower = ents.Create("npc_td_tower_base")
 	Tower:SetModel( "models/Combine_turrets/Floor_turret.mdl" ) 
 	Tower:SetTowerRange( 100 )
 	Tower:SetPos( towerPos )

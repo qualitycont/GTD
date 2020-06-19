@@ -1,5 +1,5 @@
 concommand.Add("td_class", function(ply, _, args)
-    if GAMEMODE.RoundManager:GetState() == GAMEMODE.RoundManager.States.ROUND then return end
+    if GAMEMODE.RoundManager:GetState() == GM.RoundManager.States.ROUND then return end
     
     local class = args[1]
 

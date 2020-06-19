@@ -29,6 +29,8 @@ local function _saveAll()
     end
 end
 
+-- HOOKS
+
 hook.Add("PlayerLoadout", "GTD_SyncEconomy", function(ply)
     local sid = ply:SteamID64()
     if not _data(ply) then
@@ -45,6 +47,21 @@ end)
 hook.Add("PlayerDisconnected", "GTD_PrioritySaveDisconnected", function(ply)
     _saveAll()
 end)
+
+hook.Add("OnNPCKilled", "GTD_RewardMoneyOnKill", function(npc, atk, inf)
+    if not atk:IsPlayer() or not atk:IsTower() then return end
+
+    if atk:IsPlayer() then
+        atk:GainMoney(100) -- PLACEHOLDER VALUES, CHANGE LATER
+        atk:GainXP(10)
+    elseif atk:IsTower() then
+        atk:GetOwnerPly():GainMoney(50) -- PLACEHOLDER VALUES, CHANGE LATER
+        atk:GetOwnerPly():GainXP(5)
+    end
+
+end)
+
+-- GLOBAL FUNCTIONS
 
 function economy.GainXP(ply, amount)
     local needed = ply:GetNeededXP()

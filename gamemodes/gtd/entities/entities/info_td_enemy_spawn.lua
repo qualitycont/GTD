@@ -1,5 +1,7 @@
-ENT.Type = "anim"
-ENT.Base = "base_anim"
+AddCSLuaFile()
+
+ENT.Type = "point"
+ENT.Base = "base_point"
 
 function ENT:Initialize()
 

@@ -8,6 +8,8 @@ local modes = {
 }
 
 ENT.m_fMaxYawSpeed = 200
+ENT.MasterModel = "models/gman_high.mdl"
+ENT.FollowerModel = "models/Eli.mdl"
 
 -- list.Set( "NPC", "combine1", {
 -- 	Name = "combine",
@@ -16,6 +18,7 @@ ENT.m_fMaxYawSpeed = 200
 -- })
 
 function ENT:Initialize()
+	self.FollowerModel = self.FollowerModel or self.MasterModel
 	self.followers = {}
 	self.difficulty = 2
 	self:TypeSpecific()
@@ -43,7 +46,7 @@ function ENT:SpawnFollowers()
 	if self.type ~= "master" then return end 
 	local n = 50
 	for i=1,self.difficulty do
-		local follower = ents.Create("base_ai")
+		local follower = ents.Create(self:GetClass())
 		follower:SetPos(self:GetPos()+Vector(n,n,0))
 		follower.type = "follower"
 		follower:Spawn()
@@ -68,13 +71,11 @@ function ENT:UpdateFollowers(updateMaster)
 end
 
 function ENT:TypeSpecific()
-	------------------------------------------------------------------> temporary
-	if self.type == "master" then 
-		self:SetModel("models/gman_high.mdl")
+	if self.type ~= "master" then 
+		self:SetModel(self.FollowerModel)
 	else 
-		self:SetModel("models/Eli.mdl")
+		self:SetModel(self.MasterModel)
 	end
-	------------------------------------------------------------------>
 
 	self:SetHealth(100)
 	self:DropToFloor()
@@ -180,7 +181,7 @@ function ENT:OnInjured(info)
 		self:RemoveDeadFollowers()
 		if table.Count(self.followers) == 0 then return end 
 		local n = math.random(1,table.Count(self.followers))
-		self.followers[n]:SetModel("models/gman_high.mdl") -----------------------------------> temporary
+		self.followers[n]:SetModel(self.MasterModel) -----------------------------------> temporary
 		self.followers[n].type = "master" 
 		self.followers[n].followers = self.followers
 		self.followers[n]:UpdateFollowers(true)

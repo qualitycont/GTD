@@ -10,6 +10,14 @@ avatar:SetPos(100,100)
 
 local hp = 100
 
+local function _getWaveStateColor()
+	if not GAMEMODE.RoundManager then return Color(100, 100, 100) end
+
+	local state = GAMEMODE.RoundManager.GetState()
+	if state == GAMEMODE.RoundManager.States.ROUND then return Color(230, 97, 90) end
+	return Color(57, 187, 204)
+end
+
 function GM:HUDPaint()
 	local w = ScrW()
 	local h = ScrH()
@@ -17,7 +25,7 @@ function GM:HUDPaint()
 	hp = Lerp(0.01,hp,LocalPlayer():Health())
 
 	-- waves
-	draw.RoundedBox(12,w*0.35,h*0.015,w*0.25,h*0.03,Color(57, 187, 204))
+	draw.RoundedBox(12,w*0.35,h*0.015,w*0.25,h*0.03,_getWaveStateColor())
 
 	local core = ents.FindByClass("info_td_core")
 	local c = table.Count(core)

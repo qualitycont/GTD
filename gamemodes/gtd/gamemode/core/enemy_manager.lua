@@ -51,6 +51,9 @@ function manager:GetAll()
 end
 
 function manager:Spawn(name)
+    if CLIENT then return end -- doesnt set anything so we can just skip this on clients
+    if not isstring(name) then print("not a string") return end -- this is a cool (string) only zone
+
     name = string.lower(name)
     if not enemytypes[name] then return false end
     local info = enemytypes[name]

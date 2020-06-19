@@ -33,13 +33,14 @@ _includeSH("config/economy.lua")
 
 -- Backend Functions
 _includeSH("core/util.lua")
-_includeSV("core/enemy_manager.lua")
-_includeSV("core/round_manager.lua")
+_includeSH("core/enemy_manager.lua")
+_includeSH("core/round_manager.lua")
 _includeSH("core/class_manager.lua")
 _includeSH("core/perk_manager.lua")
 _includeSH("core/tower_manager.lua")
 
 -- Functionality
+_includeSH("core/entity_ext.lua")
 _includeSH("core/player_ext.lua")
 _includeSV("core/player_ext_sv.lua")
 _includeSH("core/concommand.lua")

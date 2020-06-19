@@ -84,8 +84,6 @@ local function drawPlacementModel( index, posX ) -- For caching DModel.
 		
 		PlacementSystem.Objects[ index ].ModelhasCached = true
 		PlacementSystem.Objects[ index ].ModelObj = m_obj
-
-		chat.AddText( index .. " was crerereated.")
  		   
 	else 
 		if obj then
